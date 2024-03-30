@@ -2,7 +2,7 @@ package com.queijos_finos.main.model;
 
 import java.util.List;
 
-import jakarta.persistence.Column;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -62,6 +62,42 @@ public class Propriedade {
 	
 	
 	
+	public List<Fornecedor> getFornecedores() {
+		return fornecedores;
+	}
+	public void setFornecedores(List<Fornecedor> fornecedores) {
+		this.fornecedores = fornecedores;
+	}
+	public List<Tecnologias> getTecnologias() {
+		return tecnologias;
+	}
+	public void setTecnologias(List<Tecnologias> tecnologias) {
+		this.tecnologias = tecnologias;
+	}
+	public List<Curso> getCursos() {
+		return cursos;
+	}
+	public void setCursos(List<Curso> cursos) {
+		this.cursos = cursos;
+	}
+	public List<Imagem> getImagens() {
+		return imagens;
+	}
+	public void setImagens(List<Imagem> imagens) {
+		this.imagens = imagens;
+	}
+	public List<Contrato> getContratos() {
+		return contratos;
+	}
+	public void setContratos(List<Contrato> contratos) {
+		this.contratos = contratos;
+	}
+	public List<Amostra> getAmostras() {
+		return amostras;
+	}
+	public void setAmostras(List<Amostra> amostras) {
+		this.amostras = amostras;
+	}
 	public int getIdPropriedade() {
 		return idPropriedade;
 	}
