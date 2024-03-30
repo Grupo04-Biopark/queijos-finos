@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Amostra {
@@ -17,6 +19,11 @@ public class Amostra {
 	private Double quantidadeleite;
 	private Double quantidadeQueijo;
 	private String observacao;
+	
+	@ManyToOne
+	@JoinColumn(name="Propriedade_idPropriedade")
+	private Propriedade propriedade;
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(Id, data, observacao, quantidadeQueijo, quantidadeleite);

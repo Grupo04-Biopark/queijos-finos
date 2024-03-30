@@ -1,11 +1,13 @@
 package com.queijos_finos.main.model;
 
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 
 @Entity
 public class Tecnologias {
@@ -14,6 +16,18 @@ public class Tecnologias {
 	private Long Id;
 	private String nome;
 	private String observacao;
+	
+	
+	@ManyToMany(mappedBy = "tecnologias")
+	private List<Propriedade> propriedades;
+	
+	
+	public List<Propriedade> getPropriedades() {
+		return propriedades;
+	}
+	public void setPropriedades(List<Propriedade> propriedades) {
+		this.propriedades = propriedades;
+	}
 	public Long getId() {
 		return Id;
 	}

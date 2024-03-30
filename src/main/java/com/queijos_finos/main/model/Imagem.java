@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Imagem {
@@ -13,6 +15,12 @@ public class Imagem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long Id;
 	private String url;
+	
+	@ManyToOne
+	@JoinColumn(name="Propriedade_idPropriedade")
+	private Propriedade propriedade;
+	
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(Id, url);

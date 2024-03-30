@@ -1,11 +1,13 @@
 package com.queijos_finos.main.model;
 
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 
 @Entity
 public class Curso {
@@ -16,6 +18,10 @@ public class Curso {
 	private String conteudo;
 	private String professor;
 	private String duracao;
+	
+	@ManyToMany(mappedBy = "cursos")
+	private List<Propriedade> propriedades;
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(Id, conteudo, duracao, nome, professor);
