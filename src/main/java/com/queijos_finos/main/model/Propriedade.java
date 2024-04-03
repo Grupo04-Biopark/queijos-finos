@@ -34,21 +34,21 @@ public class Propriedade {
 	private String nomeProdutor;
 	
 	@ManyToMany
-	@JoinTable(name="Fornecedor_has_Propriedade",
-		joinColumns = @JoinColumn(name="Propriedade_idPropriedade"),
-		inverseJoinColumns = @JoinColumn(name="Fornecedor_idFornecedor"))
+	@JoinTable(name="fornecedor_has_propriedade",
+		joinColumns = @JoinColumn(name="propriedade_id_propriedade"),
+		inverseJoinColumns = @JoinColumn(name="fornecedor_id_fornecedor"))
 	private List<Fornecedor> fornecedores;
 	
 	@ManyToMany
-	@JoinTable(name="Tecnologia_has_Propriedade",
-		joinColumns = @JoinColumn(name="Propriedade_idPropriedade"),
-		inverseJoinColumns = @JoinColumn(name="Tecnologia_idTecnologia"))
+	@JoinTable(name="tecnologia_has_propriedade",
+		joinColumns = @JoinColumn(name="propriedade_id_propriedade"),
+		inverseJoinColumns = @JoinColumn(name="tecnologia_id_tecnologia"))
 	private List<Tecnologias> tecnologias;
 	
 	@ManyToMany
-	@JoinTable(name="Propriedade_has_Curso",
-		joinColumns = @JoinColumn(name="Propriedade_idPropriedade"),
-		inverseJoinColumns = @JoinColumn(name="Curso_idCurso"))
+	@JoinTable(name="propriedade_has_curso",
+		joinColumns = @JoinColumn(name="propriedade_id_propriedade"),
+		inverseJoinColumns = @JoinColumn(name="curso_id_curso"))
 	private List<Curso> cursos;
 	
 	@OneToMany(mappedBy = "propriedade")

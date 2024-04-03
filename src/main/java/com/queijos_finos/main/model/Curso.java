@@ -22,6 +22,8 @@ public class Curso {
 	@ManyToMany(mappedBy = "cursos")
 	private List<Propriedade> propriedades;
 	
+	
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(Id, conteudo, duracao, nome, professor);
