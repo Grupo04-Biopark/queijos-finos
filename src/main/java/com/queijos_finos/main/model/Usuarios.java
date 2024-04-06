@@ -1,5 +1,6 @@
 package com.queijos_finos.main.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,16 +10,17 @@ import jakarta.persistence.Id;
 public class Usuarios {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idUsuario;
+	private Long idUsuario;
+	@Column(unique=true)
 	private String email;
 	private String nome;
 	private String senha;
 	
 	
-	public int getIdUsuario() {
+	public Long getIdUsuario() {
 		return idUsuario;
 	}
-	public void setIdUsuario(int idUsuario) {
+	public void setIdUsuario(Long idUsuario) {
 		this.idUsuario = idUsuario;
 	}
 	public String getEmail() {
