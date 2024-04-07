@@ -24,8 +24,7 @@ public class PaginaInicial {
 		
 		Usuarios usu = usuarioRepo.findByEmail("ritzelarthur");
 		
-		System.out.println(usu.getNome());
-		model.addAttribute("mensagem", "deu certo ");
+		model.addAttribute("usu", usu);
 		return "paginaInicial";
 		
 	}
