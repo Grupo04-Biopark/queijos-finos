@@ -23,6 +23,22 @@ public class Contrato {
 	@JoinColumn(name="Propriedade_idPropriedade")
 	private Propriedade propriedade;
 	
+	
+	
+	
+	
+	public Contrato() {
+		
+	}
+
+	public Contrato(String nome, Date dataEmissao, Date dataVercimento, Propriedade propriedade) {
+		super();
+		this.nome = nome;
+		this.dataEmissao = dataEmissao;
+		this.dataVercimento = dataVercimento;
+		this.propriedade = propriedade;
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(Id, dataEmissao, dataVercimento, nome);
@@ -63,4 +79,11 @@ public class Contrato {
 	public void setDataVercimento(Date dataVercimento) {
 		this.dataVercimento = dataVercimento;
 	}
+	public Propriedade getPropriedade() {
+		return propriedade;
+	}
+	public void setPropriedade(Propriedade propriedade) {
+		this.propriedade = propriedade;
+	}
+	
 }
