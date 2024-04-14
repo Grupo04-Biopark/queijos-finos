@@ -16,7 +16,7 @@ import jakarta.persistence.OneToMany;
 public class Propriedade {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idPropriedade;
+	private Long idPropriedade;
 	
 	private String nomePropriedade;
 	private String email;
@@ -98,10 +98,10 @@ public class Propriedade {
 	public void setAmostras(List<Amostra> amostras) {
 		this.amostras = amostras;
 	}
-	public int getIdPropriedade() {
+	public Long getIdPropriedade() {
 		return idPropriedade;
 	}
-	public void setIdPropriedade(int idPropriedade) {
+	public void setIdPropriedade(Long idPropriedade) {
 		this.idPropriedade = idPropriedade;
 	}
 	public String getNomePropriedade() {

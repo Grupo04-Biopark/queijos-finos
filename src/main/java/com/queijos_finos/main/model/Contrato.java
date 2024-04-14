@@ -1,5 +1,6 @@
 package com.queijos_finos.main.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
@@ -22,6 +23,22 @@ public class Contrato {
 	@ManyToOne
 	@JoinColumn(name="Propriedade_idPropriedade")
 	private Propriedade propriedade;
+	
+	
+	
+	
+	
+	public Contrato() {
+		
+	}
+
+	public Contrato(String nome, Date dataEmissao, Date dataVercimento, Propriedade propriedade) {
+		super();
+		this.nome = nome;
+		this.dataEmissao = dataEmissao;
+		this.dataVercimento = dataVercimento;
+		this.propriedade = propriedade;
+	}
 	
 	@Override
 	public int hashCode() {
@@ -63,4 +80,24 @@ public class Contrato {
 	public void setDataVercimento(Date dataVercimento) {
 		this.dataVercimento = dataVercimento;
 	}
+	public Propriedade getPropriedade() {
+		return propriedade;
+	}
+	public void setPropriedade(Propriedade propriedade) {
+		this.propriedade = propriedade;
+	}
+	public String getDataVercimentoString() {
+		SimpleDateFormat formatoSaida = new SimpleDateFormat("y-MM-dd");
+	    String dataFormatada = formatoSaida.format(dataVercimento);
+	    System.out.println(dataFormatada);
+		return dataFormatada;
+	}
+	public String getDataEmissaoString() {
+		SimpleDateFormat formatoSaida = new SimpleDateFormat("y-MM-dd");
+	    String dataFormatada = formatoSaida.format(dataEmissao);
+	    System.out.println(dataFormatada);
+		return dataFormatada;
+	}
+	
+	
 }
