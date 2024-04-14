@@ -17,8 +17,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.queijos_finos.main.model.Contrato;
@@ -42,10 +46,11 @@ public class Contratos {
 		
 		if(idContrato != null) {
 			 Optional<Contrato> contrato = contratoRepo.findById(idContrato);
-			 model.addAttribute("contrato", contrato);
+			 System.out.println(contrato.get().getDataEmissao());
+			 model.addAttribute("contrato", contrato.get());
 		}
 		
-		Pageable pageable = PageRequest.of(0, 10);
+		Pageable pageable = PageRequest.of(0, 20);
 		
 		List<Propriedade> propriedades = propriedadeRepo.findAll(pageable).getContent();
 		
@@ -56,9 +61,12 @@ public class Contratos {
 	@GetMapping("/contratos")
 	public String showContratos(Model model) {
 		Contrato contrato = new Contrato();
-		Pageable pageable = PageRequest.of(0, 10);
+		
+		
+		Pageable pageable = PageRequest.of(0, 20);
 		
 		List<Contrato> contratos = contratoRepo.findAll(pageable).getContent();
+		
 		
 		
 		model.addAttribute("contratos", contratos);
@@ -67,7 +75,8 @@ public class Contratos {
 	}
 	
 	@PostMapping("/contratos")
-	public String createContrato(@RequestParam("nome") String nome,
+	public String createContrato(@RequestParam("id") Long id,
+								 @RequestParam("nome") String nome,
 								 @RequestParam("dataEmissao") String dataEmissao,
 								 @RequestParam("dataVencimento") String dataVencimento,
 								 @RequestParam("idPropriedade") Long idPropriedade,
@@ -83,11 +92,31 @@ public class Contratos {
 		Date dataVencimentoConv = formato.parse(dataVencimento);
 		
 		System.out.println(dataEmissaoConv);
-		
-		Contrato contrato = new Contrato(nome, dataEmissaoConv, dataVencimentoConv, propriedade);
-		contratoRepo.save(contrato);
-		
+		if(id != -1) {
+			contratoRepo.findById(id)
+			.map(contrato ->{
+				contrato.setNome(nome);
+				contrato.setDataEmissao(dataEmissaoConv);
+				contrato.setDataVercimento(dataVencimentoConv);
+				contrato.setPropriedade(propriedade);
+				return contratoRepo.save(contrato);
+			})
+			.orElseThrow(() -> new RuntimeException("Contrato não encontrado com o ID: " + id));
+		}else {
+			Contrato contrato = new Contrato(nome, dataEmissaoConv, dataVencimentoConv, propriedade);
+			contratoRepo.save(contrato);
+		}
+	
 		model.addAttribute("mensagem", "Contrato salvo com sucesso");
+		return "redirect:/contratos";
+	}
+	
+	
+	@PostMapping("contratos/delete/{id}")
+	public String deleteContrato(@PathVariable("id") Long id,
+								 Model model) {
+		
+		contratoRepo.deleteById(id);
 		return "redirect:/contratos";
 	}
 }
