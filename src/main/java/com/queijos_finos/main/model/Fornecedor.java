@@ -22,9 +22,6 @@ public class Fornecedor {
 	@ManyToMany(mappedBy = "fornecedores")
 	private List<Propriedade> propriedades;
 	
-	
-	
-	
 	public List<Propriedade> getPropriedades() {
 		return propriedades;
 	}

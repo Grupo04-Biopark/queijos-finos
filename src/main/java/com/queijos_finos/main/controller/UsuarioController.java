@@ -32,11 +32,11 @@ public class UsuarioController {
 		
 		Usuarios usu = usuarioRepo.findByEmail(email);
 		
-		System.out.println(senha);
-		System.out.println(usu.getSenha());
 		
 		if(usu.getSenha().equals(senha)) {
-			return "redirect:/paginaInicial";
+			model.addAttribute("usu", usu);
+			System.out.println(usu.getNome());
+			return "paginaInicial";
 		}else {
 			
 			model.addAttribute("mensagem", "Credenciais invalidas");
