@@ -5,10 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -29,7 +26,7 @@ public class UsuarioController {
 	@GetMapping("/usuarios")
 	public String showUsuarios(Model model) {
 		Usuarios usuarios = new Usuarios();
-		Pageable pageable = PageRequest.of(0, 10);
+		Pageable pageable = PageRequest.of(0, 20);
 		List<Usuarios> usuario = usuarioRepo.findAll(pageable).getContent();
 		model.addAttribute("usuarios", usuario);
 		return "usuarios";
@@ -40,7 +37,7 @@ public class UsuarioController {
 								@RequestParam("nome") String nome,
 								@RequestParam("email") String email,
 								@RequestParam("senha") String senha,
-								Model model) {
+								Model model)  {
 
 		if (id != -1) {
 			usuarioRepo.findById(id)
@@ -55,7 +52,6 @@ public class UsuarioController {
 			Usuarios usuarios = new Usuarios();
 			usuarios.setNome(nome);
 			usuarios.setEmail(email);
-
 			usuarios.setSenha(senha);
 			usuarioRepo.save(usuarios);
 		}
@@ -64,7 +60,7 @@ public class UsuarioController {
 		return "redirect:/usuarios";
 	}
 
-	@PostMapping("/usuario/delete/{id}")
+	@PostMapping("/usuarios/delete/{id}")
 	public String deleteUsuario(@PathVariable("id") Long id,
 								Model model) {
 
@@ -72,13 +68,13 @@ public class UsuarioController {
 		return "redirect:/usuarios";
 	}
 
-	@GetMapping("/usuarios/cadastrar")
-	public String createUsuarioView(@RequestParam(required = false) Long idUsuario,
-									Model model) {
 
-		if (idUsuario != null) {
-			Optional<Usuarios> usuarios = usuarioRepo.findById(idUsuario);
-			model.addAttribute("usuario", usuarios.orElse(null));
+
+	@GetMapping("/usuarios/cadastrar")
+	public String createUsuarioView(@RequestParam(required = false) Long idUsuarios, Model model) {
+		if (idUsuarios != null) {
+			Optional<Usuarios> usuarioOptional = usuarioRepo.findById(idUsuarios);
+            usuarioOptional.ifPresent(usuarios -> model.addAttribute("usuario", usuarios));
 		}
 
 		return "usuariosCadastrar";

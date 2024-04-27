@@ -191,8 +191,8 @@
                             <td><img src="comercial.png"></td>
                             <th th:text="${usuario.getNome()}"></th>
                             <td th:text="${usuario.getEmail()}"></td>
-                            <td th:text="${usuario.getEmail()}"></td>
-                            <td class="d-flex flex-row-reverse"><a><button class="btn"><img src="/ferramenta-lapis.png" alt=""></button></a></td>
+                            <td class="d-flex flex-row-reverse"><a th:href="@{/usuarios/cadastrar?idUsuarios={id}(id=${usuario.getIdUsuario()})}"><button class="btn"><img src="ferramenta-lapis.png" alt=""></button></a></td>
+
                         </tr>
                         </tbody>
                     </table>
