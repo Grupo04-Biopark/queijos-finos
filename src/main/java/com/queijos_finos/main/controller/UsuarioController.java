@@ -24,13 +24,20 @@ public class UsuarioController {
 
 
 	@GetMapping("/usuarios")
-	public String showUsuarios(Model model) {
-		Usuarios usuarios = new Usuarios();
-		Pageable pageable = PageRequest.of(0, 20);
-		List<Usuarios> usuario = usuarioRepo.findAll(pageable).getContent();
-		model.addAttribute("usuarios", usuario);
-		return "usuarios";
+	public String showUsuarios(@RequestParam(name = "query", required = false) String query, Model model) {
+		List<Usuarios> usuarios;
+		if (query != null && !query.isEmpty()) {
+			// Realizar a busca de acordo com a query
+			usuarios = usuarioRepo.findByNomeContainingIgnoreCase(query);
+		} else {
+			// Obter todos os usuários paginados
+			Pageable pageable = PageRequest.of(0, 20);
+			usuarios = usuarioRepo.findAll(pageable).getContent();
+		}
+		model.addAttribute("usuarios", usuarios);
+		return "usuarios"; // Retorna o nome da página Thymeleaf
 	}
+
 
 	@PostMapping("/usuarios")
 	public String createUsuario(@RequestParam("id") Long id,
