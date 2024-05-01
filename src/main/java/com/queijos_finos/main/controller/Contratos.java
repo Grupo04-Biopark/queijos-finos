@@ -112,11 +112,10 @@ public class Contratos {
 	}
 	
 	
-	@PostMapping("contratos/delete/{id}")
-	public String deleteContrato(@PathVariable("id") Long id,
-								 Model model) {
-		
+	@PostMapping("/contratos/delete/{id}")
+	public String deleteContrato(@PathVariable("id") Long id) {
+		System.out.println("teste");
 		contratoRepo.deleteById(id);
-		return "redirect:/contratos";
+		return "contratosCadastrar";
 	}
 }
