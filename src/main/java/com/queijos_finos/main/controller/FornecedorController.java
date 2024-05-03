@@ -28,12 +28,11 @@ public class FornecedorController {
     private FornecedorRepository fornecedorRepository;
 
     @GetMapping("/fornecedores")
-    public String showFornecedores(Model model){
-        Fornecedor fornecedor = new Fornecedor();
+    public String showFornecedores(@RequestParam(defaultValue = "0") int pagina,
+                                Model model){
+        Pageable pageable = PageRequest.of(pagina, 10);
 
-        Pageable pageable = PageRequest.of(0, 20);
-
-        List<Fornecedor> fornecedores = fornecedorRepository.findAll(pageable).getContent();
+        Page<Fornecedor> fornecedores = fornecedorRepository.findAll(pageable);
 
         model.addAttribute("fornecedores", fornecedores);
 
