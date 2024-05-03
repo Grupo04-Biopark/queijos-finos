@@ -31,7 +31,7 @@ public class UsuarioController {
 			usuarios = usuarioRepo.findByNomeContainingIgnoreCase(query);
 		} else {
 			// Obter todos os usuários paginados
-			Pageable pageable = PageRequest.of(0, 20);
+			Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
 			usuarios = usuarioRepo.findAll(pageable).getContent();
 		}
 		model.addAttribute("usuarios", usuarios);
