@@ -351,37 +351,130 @@
         <div class="conteudo-index p-3">
             <div class="d-flex w-100 p-3 flex-row-reverse border border-black">
                 <a href="/fornecedores/cadastrar"><button class="rounded-pill shadow botaoCadastrar">+ CADASTRAR NOVO</button></a>
-                <input placeholder="Pesquisa" type="text" name="filtro" id="" class="mx-5 w-75 rounded-pill shadow">
+                <button id="botaoFiltrar" onclick="filtrar()" class="btn btn-success">Pesquisar</button>
+                <input placeholder="Pesquisa" type="text" name="filtro" id="inputFiltro" class="mx-5 w-75 rounded-pill shadow">
             </div>
             <div class="w-100 d-flex conteudo ">
                 <div class="h-auto filtros">
-                    <p align="center" class="">filtros de busca</p>
-                </div>
-                <div class="p-3 w-100 tabela overflow-auto">
-                    <table class="table">
-                        <thead>
-                        <tr class="">
-                            <th scope="col"></th>
-                            <th scope="col">Nome</th>
-                            <th scope="col">Nicho</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Qualidade</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr class="border" th:each="fornecedor : ${fornecedores}">
-                            <td><img src="comercial.png"></td>
-                            <th th:text="${fornecedor.getNome()}"></th>
-                            <td th:text="${fornecedor.getNicho()}"></td>
-                            <td th:text="${fornecedor.getEmail()}"></td>
-                            <td th:text="${fornecedor.getQualidade()}"></td>
-<!--                            <td th:text="${fornecedor.getPropriedade().getNomePropriedade()}"></td>-->
-                            <td class="d-flex flex-row-reverse"><a th:href="@{/fornecedores/cadastrar?idFornecedor={id}(id=${fornecedor.getId()})}"><button class="btn"><img src="ferramenta-lapis.png" alt=""></button></a></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <p align="center" class="">Filtros de busca</p>
+                    <p id="mensagemFiltro"></p>
+                    <p><input type="checkbox" id="checkbox1" onchange="toggleCheckboxes(this)">Nome fornecedor</p>
+                    <p><input type="checkbox" id="checkbox2" onchange="toggleCheckboxes(this)">Email fornecedor</p>
+                    <p><input type="checkbox" id="checkbox3" onchange="toggleCheckboxes(this)">Nicho fornecedor</p>
+                </div>           <div class="p-3 w-100 tabela overflow-auto">
+                <table class="table">
+                    <thead>
+                    <tr class="">
+                        <th scope="col"></th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Nicho</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Qualidade</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="border" th:each="fornecedor : ${fornecedores}">
+                        <td><img src="comercial.png"></td>
+                        <th th:text="${fornecedor.getNome()}"></th>
+                        <td th:text="${fornecedor.getNicho()}"></td>
+                        <td th:text="${fornecedor.getEmail()}"></td>
+                        <td th:text="${fornecedor.getQualidade()}"></td>
+                        <!--                            <td th:text="${fornecedor.getPropriedade().getNomePropriedade()}"></td>-->
+                        <td class="d-flex flex-row-reverse"><a th:href="@{/fornecedores/cadastrar?idFornecedor={id}(id=${fornecedor.getId()})}"><button class="btn"><img src="ferramenta-lapis.png" alt=""></button></a></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
+            </div>
+            <div class="d-flex justify-content-space-between align-items-center">
+                <a class="btn btn-outline-secondary rounded px-4" th:href="@{/fornecedores(pagina=${fornecedores.number - 1})}" th:if="${!fornecedores.first}">Anterior</a>
+                <span class="page-link font-weight-bold text-lg px-4" th:text="${fornecedores.number + 1}"></span>
+                <a class="btn btn-outline-secondary rounded px-4" th:href="@{/fornecedores(pagina=${fornecedores.number + 1})}" th:if="${!fornecedores.last}">Próxima</a>
+            </div>
+            <script>
+                var formPaginacao = document.querySelector(".paginacao");
+
+                formPaginacao.addEventListener("submit", function(event) {
+                    event.preventDefault();
+                });
+            </script>
+            <script>
+                function toggleCheckboxes(checkbox) {
+                    if (checkbox.id === 'checkbox1' && checkbox.checked) {
+                        document.getElementById('checkbox2').checked = false;
+                        document.getElementById('checkbox3').checked = false;
+                    }
+                    else if (checkbox.id === 'checkbox2' && checkbox.checked) {
+                        document.getElementById('checkbox1').checked = false;
+                        document.getElementById('checkbox3').checked = false;
+                    }
+                    else if (checkbox.id === 'checkbox3' && checkbox.checked) {
+                        document.getElementById('checkbox1').checked = false;
+                        document.getElementById('checkbox2').checked = false;
+                    }
+                }
+
+                function filtrar() {
+                    var nome = document.getElementById('inputFiltro').value;
+                    var email = document.getElementById('inputFiltro').value;
+                    var nicho = document.getElementById('inputFiltro').value;
+
+                    if (document.getElementById('checkbox1').checked) {
+                        $.ajax({
+                            url: '/fornecedores/nome?nome=' + nome,
+                            type: 'GET',
+                            success: function(response) {
+                                document.open();
+                                document.write(response);
+                                document.close();
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Erro ao filtrar por nome: ' + xhr.responseText
+                                });
+                            }
+                        });
+                    } else if (document.getElementById('checkbox2').checked) {
+                        $.ajax({
+                            url: '/fornecedores/email?email=' + email,
+                            type: 'GET',
+                            success: function(response) {
+                                document.open();
+                                document.write(response);
+                                document.close();
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Erro ao filtrar por email: ' + xhr.responseText
+                                });
+                            }
+                        });
+                    } else if (document.getElementById('checkbox3').checked) {
+                        $.ajax({
+                            url: '/fornecedores/nicho?nicho=' + nicho,
+                            type: 'GET',
+                            success: function(response) {
+                                document.open();
+                                document.write(response);
+                                document.close();
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Erro ao filtrar por nicho: ' + xhr.responseText
+                                });
+                            }
+                        });
+                    } else {
+                        document.getElementById('mensagemFiltro').innerText = 'Selecione um filtro';
+                    }
+                }
+            </script>
         </div>
     </div>
 
