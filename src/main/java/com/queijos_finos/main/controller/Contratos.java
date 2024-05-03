@@ -12,9 +12,10 @@ import java.util.Optional;
 
 import org.hibernate.grammars.hql.HqlParser.IsNullPredicateContext;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -59,20 +60,16 @@ public class Contratos {
 	}
 	
 	@GetMapping("/contratos")
-	public String showContratos(Model model) {
-		Contrato contrato = new Contrato();
-		
-		
-		Pageable pageable = PageRequest.of(0, 20);
-		
-		List<Contrato> contratos = contratoRepo.findAll(pageable).getContent();
-		
-		
-		
-		model.addAttribute("contratos", contratos);
+    public String showContratos(@RequestParam(defaultValue = "0") int pagina,
+                                   Model model){
+        Pageable pageable = PageRequest.of(pagina, 10);
+        
+        Page<Contrato> contratos = contratoRepo.findAll(pageable);
+
+        model.addAttribute("contratos", contratos);
 		
 		return "contratos";
-	}
+    }
 	
 	@PostMapping("/contratos")
 	public String createContrato(@RequestParam("id") Long id,
@@ -112,11 +109,44 @@ public class Contratos {
 	}
 	
 	
-	@PostMapping("contratos/delete/{id}")
-	public String deleteContrato(@PathVariable("id") Long id,
-								 Model model) {
-		
+	@PostMapping("/contratos/delete/{id}")
+	public String deleteContrato(@PathVariable("id") Long id) {
+		System.out.println("teste");
 		contratoRepo.deleteById(id);
-		return "redirect:/contratos";
+		return "contratosCadastrar";
 	}
+	
+	
+	@GetMapping("/contratos/nome")
+	public String showContratosFiltroNome(@RequestParam("nome") String nome,
+	                                      Model model) {
+	    Contrato contrato = new Contrato();
+	    
+	    System.out.println(nome);
+	    Pageable pageable = PageRequest.of(0, 20);
+	    
+	    Page<Contrato> contratos = contratoRepo.findBynome(pageable, nome);
+	    
+	    model.addAttribute("contratos", contratos);
+	    
+	    // Retorna a página HTML com os contratos filtrados
+	    return "contratos";
+	}
+	
+	@GetMapping("/contratos/propriedade")
+	public String showContratosFiltroNomePropriedade(@RequestParam("nome") String nome,
+	                                      Model model) {
+	    Contrato contrato = new Contrato();
+	    
+	    System.out.println(nome);
+	    Pageable pageable = PageRequest.of(0, 20);
+	    
+	    Page<Contrato> contratos = contratoRepo.findByNomProp(pageable, nome);
+	    
+	    model.addAttribute("contratos", contratos);
+	    
+	    // Retorna a página HTML com os contratos filtrados
+	    return "contratos";
+	}
+
 }
