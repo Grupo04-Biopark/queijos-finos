@@ -2,6 +2,8 @@ package com.queijos_finos.main.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -55,6 +57,7 @@ public class Propriedade {
 	private List<Imagem> imagens;
 	
 	@OneToMany(mappedBy = "propriedade")
+	@JsonManagedReference
 	private List<Contrato> contratos;
 	
 	@OneToMany(mappedBy = "propriedade")
