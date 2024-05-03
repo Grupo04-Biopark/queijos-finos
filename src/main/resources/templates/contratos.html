@@ -351,11 +351,16 @@
       <div class="conteudo-index p-3">
         <div class="d-flex w-100 p-3 flex-row-reverse border border-black">
           <a href="/contratos/cadastrar"><button class="rounded-pill shadow botaoCadastrar">+ CADASTRAR NOVO</button></a>
-          <input placeholder="Pesquisa" type="text" name="filtro" id="" class="mx-5 w-75 rounded-pill shadow">
+		  <button id="botaoFiltrar" onclick="filtrar()" class="btn btn-success">Pesquisar</button>
+          <input placeholder="Pesquisa" type="text" name="filtro" id="inputFiltro" class="mx-5 w-75 rounded-pill shadow">
+
         </div>
         <div class="w-100 d-flex conteudo ">
             <div class="h-auto filtros">
-              <p align="center" class="">filtros de busca</p>
+              <p align="center" class="">Filtros de busca</p>
+			  <p id="mensagemFiltro"></p>
+			  <p><input type="checkbox" id="checkbox1" onchange="toggleCheckboxes(this)">Nome contrato</p>
+			  <p><input type="checkbox" id="checkbox2" onchange="toggleCheckboxes(this)">Nome propriedade</p>
             </div>
             <div class="p-3 w-100 tabela overflow-auto">
             <table class="table">
@@ -369,7 +374,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr class="border" th:each="contrato : ${contratos}">
+                <tr class="border" th:each="contrato : ${contratos.getContent()}">
 					<td><img src="comercial.png"></td>
                   <th th:text="${contrato.getNome()}"></th>
                   <td th:text="${contrato.getDataEmissaoString()}"></td>
@@ -380,12 +385,82 @@
               </tbody>
             </table>
             </div>
+			
           </div>
+		  <div class="d-flex justify-content-space-between align-items-center">
+		  			                  <a class="btn btn-primary rounded px-4" th:href="@{/contratos(pagina=${contratos.number - 1})}" th:if="${!contratos.first}">Anterior</a>
+		  			                  <span class="page-link font-weight-bold text-lg px-4" th:text="${contratos.number + 1}"></span>
+		  			                  <a class="btn btn-primary rounded px-4" th:href="@{/contratos(pagina=${contratos.number + 1})}" th:if="${!contratos.last}">Próxima</a>
+		  			              </div>
+		  			              
        </div>
       </div>
     
     
     <!-- importando script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  </body>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	
+	<script>
+        var formPaginacao = document.querySelector(".paginacao");
+  
+        formPaginacao.addEventListener("submit", function(event) {
+            event.preventDefault();
+        });
+    </script>
+									  
+	<script>
+		function toggleCheckboxes(checkbox) {
+		    if (checkbox.id === 'checkbox1' && checkbox.checked) {
+		        document.getElementById('checkbox2').checked = false;
+		    } else if (checkbox.id === 'checkbox2' && checkbox.checked) {
+		        document.getElementById('checkbox1').checked = false;
+		    }
+		}
+		
+		function filtrar() {
+		    var nome = document.getElementById('inputFiltro').value;
+		    if(document.getElementById('checkbox1').checked){
+			    $.ajax({
+			        url: '/contratos/nome?nome=' + nome,
+			        type: 'GET',
+			        success: function(response) {
+						document.open();
+	                    document.write(response);
+	                    document.close();
+			        },
+			        error: function(xhr, status, error) {
+			            Swal.fire({
+			                icon: 'error',
+			                title: 'Oops...',
+			                text: 'Ocorreu um erro ao filtrar.'
+			            });
+			        }
+			    });
+			}else if(document.getElementById('checkbox2').checked){
+				$.ajax({
+			        url: '/contratos/propriedade?nome=' + nome,
+			        type: 'GET',
+			        success: function(response) {
+						document.open();
+	                    document.write(response);
+	                    document.close();
+			        },
+			        error: function(xhr, status, error) {
+			            Swal.fire({
+			                icon: 'error',
+			                title: 'Oops...',
+			                text: 'Ocorreu um erro ao filtrar.'
+			            });
+			        }
+			    });
+			}else{
+				document.getElementById('mensagemFiltro').innerText = 'Selecione um filtro'
+			}
+		}
+
+
+	</script>
+	</body>
 </html>
