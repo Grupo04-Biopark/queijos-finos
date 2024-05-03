@@ -12,7 +12,7 @@ import com.queijos_finos.main.model.Usuarios;
 import com.queijos_finos.main.repository.UsuarioRepository;
 
 @Controller
-public class PaginaInicial {
+public class PaginaInicialController {
 	@Autowired
 	private UsuarioRepository usuarioRepo;
 	
