@@ -170,16 +170,18 @@
         </div>
 
         <div class="conteudo-index p-3">
-            <div class="d-flex w-100 p-3 flex-row-reverse border border-black">
-                <a href="/usuarios/cadastrar"><button class="rounded-pill shadow botaoCadastrar">+ CADASTRAR NOVO</button></a>
-                <form th:action="@{/usuarios}" method="get" class="mx-5 w-75">
-                    <input type="text" id="searchInput" name="query" placeholder="Digite sua busca..." class=" mx-5 w-75 rounded-pill shadow">
-                </form>
+            <div class="d-flex align-items-center justify-content-between p-3 border border-black w-100">
+                <h1 class="mx-auto mb-0">Usuários</h1>
+                <a href="/usuarios/cadastrar">
+                    <button class="rounded-pill shadow botaoCadastrar">+ CADASTRAR NOVO</button>
+                </a>
             </div>
+
+
+
+
             <div class="w-100 d-flex conteudo">
-                <div class="h-auto filtros">
-                    <p align="center" class="">filtros de busca</p>
-                </div>
+
                 <div class="p-3 w-100 tabela overflow-auto">
                     <table class="table" id="usuarioTable">
                         <thead>
