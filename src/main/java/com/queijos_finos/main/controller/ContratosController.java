@@ -46,7 +46,7 @@ public class ContratosController {
 			 model.addAttribute("contrato", contrato.get());
 		}
 		
-		Pageable pageable = PageRequest.of(0, 20);
+		Pageable pageable = PageRequest.of(0, 100);
 		
 		List<Propriedade> propriedades = propriedadeRepo.findAll(pageable).getContent();
 		
@@ -57,7 +57,7 @@ public class ContratosController {
 	@GetMapping("/contratos")
     public String showContratos(
                                    Model model){
-        Pageable pageable = PageRequest.of(10, 30);
+        Pageable pageable = PageRequest.of(0, 30);
         
         Page<Contrato> contratos = contratoRepo.findAll(pageable);
 
