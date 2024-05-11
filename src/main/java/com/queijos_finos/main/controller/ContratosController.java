@@ -42,13 +42,13 @@ public class ContratosController {
 		
 		if(idContrato != null) {
 			 Optional<Contrato> contrato = contratoRepo.findById(idContrato);
-			 System.out.println(contrato.get().getDataEmissao());
+			
 			 model.addAttribute("contrato", contrato.get());
 		}
 		
-		Pageable pageable = PageRequest.of(0, 100);
 		
-		List<Propriedade> propriedades = propriedadeRepo.findAll(pageable).getContent();
+		
+		List<Propriedade> propriedades = propriedadeRepo.findWithoutContrato();
 		
 		model.addAttribute("propriedades", propriedades);
 		return "contratosCadastrar";
@@ -57,7 +57,7 @@ public class ContratosController {
 	@GetMapping("/contratos")
     public String showContratos(
                                    Model model){
-        Pageable pageable = PageRequest.of(0, 30);
+        Pageable pageable = PageRequest.of(30, 25);
         
         Page<Contrato> contratos = contratoRepo.findAll(pageable);
 
@@ -109,39 +109,6 @@ public class ContratosController {
 		System.out.println("teste");
 		contratoRepo.deleteById(id);
 		return "contratosCadastrar";
-	}
-	
-	
-	@GetMapping("/contratos/nome")
-	public String showContratosFiltroNome(@RequestParam("nome") String nome,
-	                                      Model model) {
-	    Contrato contrato = new Contrato();
-	    
-	    System.out.println(nome);
-	    Pageable pageable = PageRequest.of(0, 20);
-	    
-	    Page<Contrato> contratos = contratoRepo.findBynome(pageable, nome);
-	    
-	    model.addAttribute("contratos", contratos);
-	    
-	    // Retorna a página HTML com os contratos filtrados
-	    return "contratos";
-	}
-	
-	@GetMapping("/contratos/propriedade")
-	public String showContratosFiltroNomePropriedade(@RequestParam("nome") String nome,
-	                                      Model model) {
-	    Contrato contrato = new Contrato();
-	    
-	    System.out.println(nome);
-	    Pageable pageable = PageRequest.of(0, 20);
-	    
-	    Page<Contrato> contratos = contratoRepo.findByNomProp(pageable, nome);
-	    
-	    model.addAttribute("contratos", contratos);
-	    
-	    // Retorna a página HTML com os contratos filtrados
-	    return "contratos";
 	}
 
 }
