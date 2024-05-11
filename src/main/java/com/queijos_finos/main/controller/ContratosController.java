@@ -55,15 +55,15 @@ public class ContratosController {
 	}
 	
 	@GetMapping("/contratos")
-    public String showContratos(@RequestParam(defaultValue = "0") int pagina,
+    public String showContratos(
                                    Model model){
-        Pageable pageable = PageRequest.of(pagina, 10);
+        Pageable pageable = PageRequest.of(10, 30);
         
         Page<Contrato> contratos = contratoRepo.findAll(pageable);
 
         model.addAttribute("contratos", contratos);
 		
-		return "contratos";
+		return "contratos"; 
     }
 	
 	@PostMapping("/contratos")
