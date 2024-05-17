@@ -3,6 +3,7 @@ package com.queijos_finos.main.controller;
 import com.queijos_finos.main.model.Contrato;
 import com.queijos_finos.main.model.Fornecedor;
 import com.queijos_finos.main.model.Propriedade;
+import com.queijos_finos.main.model.Usuarios;
 import com.queijos_finos.main.repository.FornecedorRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,59 +29,15 @@ public class FornecedorController {
     private FornecedorRepository fornecedorRepository;
 
     @GetMapping("/fornecedores")
-    public String showFornecedores(@RequestParam(defaultValue = "0") int pagina,
-                                Model model){
-        Pageable pageable = PageRequest.of(pagina, 10);
-
-        Page<Fornecedor> fornecedores = fornecedorRepository.findAll(pageable);
-
+    public String showFornecedores(@RequestParam(name = "query", required = false) String query, Model model){
+        List<Fornecedor> fornecedores;
+        if (query != null && !query.isEmpty()) {
+            fornecedores = fornecedorRepository.findByNomeContainingIgnoreCase(query);
+        } else {
+            Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
+            fornecedores = fornecedorRepository.findAll(pageable).getContent();
+        }
         model.addAttribute("fornecedores", fornecedores);
-
-        return "fornecedores";
-    }
-
-    @GetMapping("/fornecedores/nome")
-    public String showFornecedoresFiltroNome(@RequestParam("nome") String nome,
-                                             Model model) {
-        Fornecedor fornecedor = new Fornecedor();
-
-        System.out.println(nome);
-        Pageable pageable = PageRequest.of(0, 20);
-
-        Page<Fornecedor> fornecedores = fornecedorRepository.findByNome(pageable, nome);
-
-        model.addAttribute("fornecedores", fornecedores);
-
-        return "fornecedores";
-    }
-
-    @GetMapping("/fornecedores/email")
-    public String showFornecedoresFiltroEmail(@RequestParam("email") String email,
-                                              Model model) {
-        Fornecedor fornecedor = new Fornecedor();
-
-        System.out.println(email);
-        Pageable pageable = PageRequest.of(0, 20);
-
-        Page<Fornecedor> fornecedores = fornecedorRepository.findByEmail(pageable, email);
-
-        model.addAttribute("fornecedores", fornecedores);
-
-        return "fornecedores";
-    }
-
-    @GetMapping("/fornecedores/nicho")
-    public String showFornecedoresFiltroNicho(@RequestParam("nicho") String nicho,
-                                              Model model) {
-        Fornecedor fornecedor = new Fornecedor();
-
-        System.out.println(nicho);
-        Pageable pageable = PageRequest.of(0, 20);
-
-        Page<Fornecedor> fornecedores = fornecedorRepository.findByNicho(pageable, nicho);
-
-        model.addAttribute("fornecedores", fornecedores);
-
         return "fornecedores";
     }
 
