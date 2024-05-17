@@ -351,7 +351,8 @@
                 <span th:text="${mensagem}"></span>
                 <div class="w-50">
                 </div>
-        <form class="w-100" th:action="@{/usuarios}" method="post">
+                <h1 th:text="${usuario != null}? 'Editar' : 'Cadastrar' "></h1>
+                <form class="w-100" th:action="@{/usuarios}" method="post">
             <div class="mb-3">
                 <input th:value="${usuario != null}? ${usuario.getIdUsuario()} : -1" name="id" type="hidden" placeholder="id">            </div>
                 <div class="mb-3">
