@@ -114,9 +114,5 @@ public class UsuarioController {
 			model.addAttribute("mensagem", "Credenciais invalidas");
 			return "login";
 		}
-		
 	}
-	
-	
-	
 }
