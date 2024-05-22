@@ -26,14 +26,8 @@ public class UsuarioController {
 	@GetMapping("/usuarios")
 	public String showUsuarios(@RequestParam(name = "query", required = false) String query, Model model) {
 		List<Usuarios> usuarios;
-		if (query != null && !query.isEmpty()) {
-			// Realizar a busca de acordo com a query
-			usuarios = usuarioRepo.findByNomeContainingIgnoreCase(query);
-		} else {
-			// Obter todos os usuários paginados
-			Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
-			usuarios = usuarioRepo.findAll(pageable).getContent();
-		}
+		Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
+		usuarios = usuarioRepo.findAll(pageable).getContent();
 		model.addAttribute("usuarios", usuarios);
 		return "usuarios"; // Retorna o nome da página Thymeleaf
 	}
