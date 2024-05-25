@@ -13,7 +13,7 @@ import jakarta.persistence.ManyToMany;
 public class Curso {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long Id;
+	private Long id;
 	private String nome;
 	private String conteudo;
 	private String professor;
@@ -26,7 +26,7 @@ public class Curso {
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(Id, conteudo, duracao, nome, professor);
+		return Objects.hash(id, conteudo, duracao, nome, professor);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -37,15 +37,15 @@ public class Curso {
 		if (getClass() != obj.getClass())
 			return false;
 		Curso other = (Curso) obj;
-		return Objects.equals(Id, other.Id) && Objects.equals(conteudo, other.conteudo)
+		return Objects.equals(id, other.id) && Objects.equals(conteudo, other.conteudo)
 				&& Objects.equals(duracao, other.duracao) && Objects.equals(nome, other.nome)
 				&& Objects.equals(professor, other.professor);
 	}
 	public Long getId() {
-		return Id;
+		return id;
 	}
-	public void setId(Long id) {
-		Id = id;
+	public void setId(Long idReq) {
+		id = idReq;
 	}
 	public String getNome() {
 		return nome;
@@ -71,4 +71,11 @@ public class Curso {
 	public void setDuracao(String duracao) {
 		this.duracao = duracao;
 	}
+	@Override
+	public String toString() {
+		return "Curso [Id=" + id + ", nome=" + nome + ", conteudo=" + conteudo + ", professor=" + professor
+				+ ", duracao=" + duracao + ", propriedades=" + propriedades + "]";
+	}
+	
+	
 }

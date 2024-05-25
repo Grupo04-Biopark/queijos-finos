@@ -191,6 +191,15 @@ public class Propriedade {
 	public void setNomeProdutor(String nomeProdutor) {
 		this.nomeProdutor = nomeProdutor;
 	}
+	@Override
+	public String toString() {
+		return "Propriedade [idPropriedade=" + idPropriedade + ", nomePropriedade=" + nomePropriedade + ", email="
+				+ email + ", status=" + status + ", CPF=" + CPF + ", CNPJ=" + CNPJ + ", telefone=" + telefone
+				+ ", celular=" + celular + ", rua=" + rua + ", bairro=" + bairro + ", cidade=" + cidade + ", UF=" + UF
+				+ ", latitude=" + latitude + ", longitude=" + longitude + ", nomeProdutor=" + nomeProdutor
+				+ ", fornecedores=" + fornecedores + ", tecnologias=" + tecnologias + ", cursos=" + cursos.toString()
+				+ ", imagens=" + imagens + ", contratos=" + contratos + ", amostras=" + amostras + "]";
+	}
 	
 	
 }
