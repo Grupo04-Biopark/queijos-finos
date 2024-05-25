@@ -59,7 +59,7 @@ public class PropriedadeController {
 		
 		model.addAttribute("cursos", cursos);
 		model.addAttribute("tecnologias", tecnologias);
-		model.addAttribute("fornecedor", fornecedores);
+		model.addAttribute("fornecedores", fornecedores);
 		
 		return "propriedadeCadastrar";
 	}

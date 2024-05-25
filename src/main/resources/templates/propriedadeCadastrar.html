@@ -520,33 +520,64 @@
 			      </div>
 				  
 				  <div class="w-100 d-flex justify-content-betwen">
-					  <div class="border border-black w-50 h-50 overflow-auto p-3 rounded">
-					  	<div class="d-flex align-itens-center ">
+					<div class="w-100">
+						<div class="d-flex align-itens-center m-3">
 							<p class="m-3">Cursos</p>
-							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Adicionar curso</button>
+							<button type="button" class="btn btn-primary rounded-pill" data-toggle="modal" data-target="#exampleModalCenter">Adicionar curso</button>
 							
 						</div>
-						<table class="table" id="cursosTable">
-				                <thead>
-					                  <th scope="col">Nome</th>
-					                  <th scope="col">Conteudo</th>
-					                  <th scope="col">Professor</th>
-					                  <th scope="col">Duração</th>
-									  
-					                </tr>
-				                </thead>
-								<tbody 								th:if="${propriedade != null}" >
-					                <tr class="border" th:each="curso : ${propriedade.getCursos()}">
-					                  <th class="cursoID" th:id="${curso.getId()}" th:text="${curso.getNome()}"></th>
-					                  <td th:text="${curso.getConteudo()}"></td>
-					                  <td th:text="${curso.getProfessor()}"></td>
-					                  <td th:text="${curso.getDuracao()}"></td>
-					                </tr>
-					              </tbody>
-				            </table>
+						  <div class="border border-black w-50 overflow-auto p-3 rounded" style="height: 400px; width: 400px;">
+						  	
+							<table class="table" id="cursosTable">
+					                <thead>
+						                  <th scope="col">Nome</th>
+						                  <th scope="col">Conteudo</th>
+						                  <th scope="col">Professor</th>
+						                  <th scope="col">Duração</th>
+										  
+						                </tr>
+					                </thead>
+									<tbody th:if="${propriedade != null}" >
+						                <tr class="border" th:each="curso : ${propriedade.getCursos()}">
+						                  <th class="cursoID" th:id="${curso.getId()}" th:text="${curso.getNome()}"></th>
+						                  <td th:text="${curso.getConteudo()}"></td>
+						                  <td th:text="${curso.getProfessor()}"></td>
+						                  <td th:text="${curso.getDuracao()}"></td>
+						                </tr>
+						              </tbody>
+					            </table>
+						  </div>
 					  </div>
-					
 				  </div>
+				  
+				  
+				  
+				  <div class="w-100 border border-black rounded overflow-auto" style="height: 600px; margin-top: 100px;">
+					<p class="text-center fs-2">Fornecedores
+						<button type="button" class="btn btn-primary rounded-pill" data-toggle="modal" data-target="#fornecedorModal">Adicionar Fornecedor</button>
+					</p>
+					
+					<table class="table-stripe stripe" id="fornecedorTable">
+                        <thead>
+                        <tr class="">
+                            <th scope="col">Nome</th>
+                            <th scope="col">Email</th>
+							<th scope="col">Nicho</th>
+                            <th scope="col">Qualidade</th>
+                        </tr>
+                        </thead>
+                        <tbody th:if="${propriedade != null}">
+	                        <tr class="border user-row" th:each="fornecedor : ${propriedade.getFornecedores()}">
+	                            <td class="fornecedorID" th:id="${fornecedor.getId()}" th:text="${fornecedor.getNome()}"></td>
+	                            <td th:text="${fornecedor.getEmail()}"></td>
+								<td th:text="${fornecedor.getNicho()}"></td>
+	                            <td th:text="${fornecedor.getQualidade()}"></td>
+	                        </tr>
+                        </tbody>
+                    </table>
+				  </div>
+				  
+				  
 				  <div class="d-flex justify-content-end w-auto">
   			          <button type="submit" th:text="${propriedade != null}? 'Atualizar' : 'Cadastrar'" 
   			                  class="btn btn-success rounded-pill fs-4 px-5 shadow" 
@@ -570,7 +601,7 @@
       </div>
 	  </div>
     
-	  <!-- Modal -->
+	  <!-- Modal CURSOS-->
 		  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 		    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
 		      <div class="modal-content">
@@ -609,7 +640,46 @@
 		      </div>
 		    </div>
 		  </div>
-	  
+		  <!-- Modal FORNECEDOR-->
+		  		  <div class="modal fade" id="fornecedorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		  		    <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+		  		      <div class="modal-content">
+		  		        <div class="modal-header">
+		  		          <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+		  		          
+		  		        </div>
+		  		        <div class="modal-body">
+		  					<table class="table-stripe stripe" id="fornecedorTable2">
+								<thead>
+			                        <tr class="">
+			                            <th scope="col">Nome</th>
+			                            <th scope="col">Email</th>
+										<th scope="col">Nicho</th>
+			                            <th scope="col">Qualidade</th>
+										<th scope="col"></th>
+			                        </tr>
+		                        </thead>
+		  						<tbody id="tbodyFornecedor">
+		  			                <tr class="border" th:each="fornecedor : ${fornecedores}">
+		  			                  <th th:class="'fornecedorADD '+${fornecedor.getId()}" th:id="${fornecedor.getId()}" th:text="${fornecedor.getNome()}"></th>
+		  			                  <td th:class="'fornecedorADD '+${fornecedor.getId()}" th:text="${fornecedor.getEmail()}"></td>
+		  			                  <td th:class="'fornecedorADD '+${fornecedor.getId()}" th:text="${fornecedor.getNicho()}"></td>
+									  <td th:class="'fornecedorADD '+${fornecedor.getId()}" th:text="${fornecedor.getQualidade()}"></td>
+		  							  <td>
+		  								<input type="checkbox" th:id="${fornecedor.getId()}" class="fornecedorADDcheck" name="scales"/>
+		  							     <label for="scales">Adicionar</label>
+		  							  </td>
+		  			                </tr>
+		  			              </tbody>
+		  		            </table>
+		  		        </div>
+		  		        <div class="modal-footer">
+		  		          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+		  		          <button type="button" class="btn btn-primary" onclick="adicionarFornecedores()">Adicionar</button>
+		  		        </div>
+		  		      </div>
+		  		    </div>
+		  		  </div>
     
     <!-- importando script -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -631,6 +701,11 @@
  				lengthChange: false,
  				info: false
  			 });
+			 $('#fornecedorTable').DataTable({
+  				paging: false,
+  				lengthChange: false,
+  				info: false
+  			 });
 	    } );
 		
 		
@@ -639,6 +714,46 @@
             event.preventDefault(); 
             cadastrarPropriedade();
         });
+		
+		function adicionarFornecedores(){
+					var selects = document.getElementsByClassName("fornecedorADDcheck")
+					for (let check of selects){
+						if(check.checked){
+							let flag = 0
+							var cursosSelect = document.getElementsByClassName("fornecedorID")
+							for(let curso of cursosSelect){
+								if(curso.id == check.id){
+									flag = 1
+								}
+							}
+							if(flag == 0){
+								var infos = document.getElementsByClassName(`fornecedorADD ${check.id}`)
+								var table = new DataTable("#fornecedorTable")
+								table.row					
+									.add([
+							            infos[0].innerText,
+							           	infos[1].innerText,
+							            infos[2].innerText,
+							            infos[3].innerText
+							        ])
+							        .draw(false);
+									
+								var linhas = document.getElementById("fornecedorTable").children[1].children
+								console.log(linhas)
+								for (let linha of linhas){
+									
+									if(linha.children[0].innerText == infos[0].innerText){
+										linha.children[0].setAttribute("id", check.id)
+										linha.children[0].className = `sorting_1 fornecedorID`
+										break;
+									}
+									
+								}
+							}
+										
+						}
+					}
+				}
 		
 		function adicionarCursos(){
 			var selects = document.getElementsByClassName("cursoADDcheck")
@@ -699,6 +814,23 @@
 				})
 			}
 			
+			fornecedoresIds = []
+			allFornecedores = []
+			fornecedores = document.getElementsByClassName("fornecedorID")
+			
+			for(let item of fornecedores) {
+				fornecedoresIds.push(item.id)
+			}
+			
+            for(let fornecedorId of fornecedoresIds){
+				allFornecedores.push({
+					id: parseInt(fornecedorId),
+					nome: null,
+					email:null,
+					nicho:null,
+					qualidade:null,
+				})
+			}
 			
             $.ajax({
                 url: '/propriedade' ,
@@ -720,7 +852,8 @@
 				    latitude: document.getElementById('latitude').value,
 				    longitude: document.getElementById('longitude').value,
 				    nomeProdutor: document.getElementById('nomeProdutor').value,
-				    cursos: allCursos
+				    cursos: allCursos,
+					fornecedores: allFornecedores
 				}),
                 success: function(response) {
                     window.location.href = '/contratos';
