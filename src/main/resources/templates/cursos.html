@@ -362,10 +362,15 @@
                     </thead>
                     <tbody>
                     <tr class="border" th:each="curso : ${cursos}">
-                        <td th:text="${curso.nome}"></td>
-                        <td th:text="${curso.professor}"></td>
-                        <td th:text="${curso.conteudo}"></td>
-                        <td th:text="${curso.duracao}"></td>
+                        <th th:text="${curso.getNome()}"></th>
+                        <td th:text="${curso.getConteudo()}"></td>
+                        <td th:text="${curso.getProfessor()}"></td>
+                        <td th:text="${curso.getDuracao()}"></td>
+                        <td class="d-flex flex-row-reverse">
+                            <a th:href="@{/cursos/cadastrar?idCurso={id}(id=${curso.getId()})}">
+                                <button class="btn"><img src="ferramenta-lapis.png" alt=""></button>
+                            </a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
