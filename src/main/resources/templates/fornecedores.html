@@ -15,7 +15,6 @@
 
 <body>
 <div class="index">
-    <!-- Navbar -->
     <div class="sidebar">
 
         <nav>
@@ -170,7 +169,6 @@
         </div>
 
         <div class="conteudo-index p-3">
-            <!-- Search bar and new item button -->
             <div class="d-flex justify-content-between align-items-center w-100 p-3 border border-black">
                 <div class="text-center">
                     <h1 class="text-uppercase text-bold text-black">Fornecedores</h1>
@@ -200,7 +198,7 @@
                             <td th:text="${fornecedor.email}"></td>
                             <td th:text="${fornecedor.qualidade}"></td>
                             <td class="d-flex flex-row-reverse">
-                                <a th:href="@{/fornecedores/cadastrar(id=${fornecedor.id})}">
+                                <a th:href="@{/fornecedores/cadastrar?idFornecedor={id}(id=${fornecedor.getId()})}">
                                     <button class="btn"><img src="ferramenta-lapis.png" alt=""></button>
                                 </a>
                             </td>
@@ -212,9 +210,7 @@
         </div>
     </div>
 
-    <!-- Include jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Include DataTables JS -->
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 
     <script>
@@ -223,7 +219,6 @@
         } );
     </script>
 
-    <!-- Include Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
