@@ -36,8 +36,11 @@ public class CursosController {
         return "cursosCadastrar";
     }
 
-    @PostMapping("/teste")
+    @PostMapping
     public String cadastrarCurso(@ModelAttribute Curso curso, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "cursosCadastrar";
+        }
         cursosRepository.save(curso);
         return "redirect:/cursos";
     }
@@ -66,7 +69,7 @@ public class CursosController {
         return "redirect:/cursos";
     }
 
-    @PostMapping("/excluir/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteCursos(@PathVariable Long id, Model model) {
         cursosRepository.deleteById(id);
         model.addAttribute("mensagem", "Curso excluído com sucesso");

@@ -368,7 +368,7 @@
                         <td th:text="${curso.getConteudo()}"></td>
                         <td th:text="${curso.getDuracao()}"></td>
                         <td class="d-flex flex-row-reverse">
-                            <a th:href="@{/cursos/cadastrar?idCurso={id}(id=${curso.getId()})}">
+                            <a th:href="@{/cursos/editar/{id}(id=${curso.getId()})}">
                                 <button class="btn"><img src="ferramenta-lapis.png" alt="Editar"></button>
                             </a>
                         </td>
