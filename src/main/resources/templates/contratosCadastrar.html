@@ -359,7 +359,7 @@
 		  	
               <form class="w-100" th:action="@{/contratos}" method="post">
           			  <input type="hidden" th:value="${contrato != null}? ${contrato.getId()} : -1" name="id">
-                  <div class="mb-3 p-2">
+                  <div class="mb-3 ">
                       <input th:value="${contrato != null}? ${contrato.getNome()} : ''" name="nome" required type="text" style="border-color: #273C4E;" class="form-control rounded-pill " aria-describedby="emailHelp" placeholder="Nome do Contrato">
                   </div>
                   <div class="d-flex">
@@ -380,7 +380,6 @@
                         </select>
                   </div>
                   <div class="d-flex justify-content-end w-auto">
-					
                       <button type="submit" th:text="${contrato != null}? 'Atualizar' : 'Cadastrar'" class="btn btn-success rounded-pill fs-4 px-5 shadow" style="width: 200px;">Cadastrar</button>
                   </div>
               </form>
