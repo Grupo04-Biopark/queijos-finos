@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -53,14 +54,14 @@ public class Propriedade {
 		inverseJoinColumns = @JoinColumn(name="curso_id_curso"))
 	private List<Curso> cursos;
 	
-	@OneToMany(mappedBy = "propriedade")
+	@OneToMany(cascade=CascadeType.REMOVE, mappedBy = "propriedade")
 	private List<Imagem> imagens;
 	
-	@OneToMany(mappedBy = "propriedade")
+	@OneToMany(cascade=CascadeType.REMOVE, mappedBy = "propriedade")
 	@JsonManagedReference
 	private List<Contrato> contratos;
 	
-	@OneToMany(mappedBy = "propriedade")
+	@OneToMany(cascade=CascadeType.REMOVE, mappedBy = "propriedade")
 	private List<Amostra> amostras;
 	
 	

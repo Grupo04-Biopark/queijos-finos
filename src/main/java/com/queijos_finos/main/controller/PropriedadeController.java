@@ -79,8 +79,18 @@ public class PropriedadeController {
 	@PostMapping("/propriedade")
 	public String createContrato(@RequestBody Propriedade propriedadeReq,
 									Model model) throws ParseException {
-
-		System.out.println(propriedadeReq.toString());
+		
+		for (Tecnologias tecnologia : propriedadeReq.getTecnologias()) {
+            List<Tecnologias> tecnologiaExistente = tecnologiaRepo.findByNome(tecnologia.getNome());
+            if (tecnologiaExistente.isEmpty()) {
+            	tecnologia.setId(null);
+                tecnologiaRepo.save(tecnologia);
+                tecnologia.setId(tecnologiaRepo.findFirstByOrderByIdDesc().getId());
+            }
+        }
+		
+		System.out.print(propriedadeReq);
+		
 		if(propriedadeReq.getIdPropriedade() != -1) {
 			propriedadeRepo.findById(propriedadeReq.getIdPropriedade())
 			.map(propriedade ->{
