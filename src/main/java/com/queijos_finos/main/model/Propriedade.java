@@ -2,7 +2,10 @@ package com.queijos_finos.main.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -51,13 +54,14 @@ public class Propriedade {
 		inverseJoinColumns = @JoinColumn(name="curso_id_curso"))
 	private List<Curso> cursos;
 	
-	@OneToMany(mappedBy = "propriedade")
+	@OneToMany(cascade=CascadeType.REMOVE, mappedBy = "propriedade")
 	private List<Imagem> imagens;
 	
-	@OneToMany(mappedBy = "propriedade")
+	@OneToMany(cascade=CascadeType.REMOVE, mappedBy = "propriedade")
+	@JsonManagedReference
 	private List<Contrato> contratos;
 	
-	@OneToMany(mappedBy = "propriedade")
+	@OneToMany(cascade=CascadeType.REMOVE, mappedBy = "propriedade")
 	private List<Amostra> amostras;
 	
 	
@@ -187,6 +191,15 @@ public class Propriedade {
 	}
 	public void setNomeProdutor(String nomeProdutor) {
 		this.nomeProdutor = nomeProdutor;
+	}
+	@Override
+	public String toString() {
+		return "Propriedade [idPropriedade=" + idPropriedade + ", nomePropriedade=" + nomePropriedade + ", email="
+				+ email + ", status=" + status + ", CPF=" + CPF + ", CNPJ=" + CNPJ + ", telefone=" + telefone
+				+ ", celular=" + celular + ", rua=" + rua + ", bairro=" + bairro + ", cidade=" + cidade + ", UF=" + UF
+				+ ", latitude=" + latitude + ", longitude=" + longitude + ", nomeProdutor=" + nomeProdutor
+				+ ", fornecedores=" + fornecedores + ", tecnologias=" + tecnologias + ", cursos=" + cursos.toString()
+				+ ", imagens=" + imagens + ", contratos=" + contratos + ", amostras=" + amostras + "]";
 	}
 	
 	

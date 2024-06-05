@@ -1,6 +1,5 @@
 package com.queijos_finos.main.repository;
 
-
 import com.queijos_finos.main.model.Curso;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,9 +18,7 @@ public interface CursosRepository extends JpaRepository<Curso, Long> {
 
     List<Curso> findByNomeContainingIgnoreCase(String nome);
 
-
 }
-
 
 
 

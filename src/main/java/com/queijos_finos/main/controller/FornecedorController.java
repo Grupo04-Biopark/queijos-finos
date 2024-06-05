@@ -3,9 +3,11 @@ package com.queijos_finos.main.controller;
 import com.queijos_finos.main.model.Contrato;
 import com.queijos_finos.main.model.Fornecedor;
 import com.queijos_finos.main.model.Propriedade;
+import com.queijos_finos.main.model.Usuarios;
 import com.queijos_finos.main.repository.FornecedorRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -27,15 +29,15 @@ public class FornecedorController {
     private FornecedorRepository fornecedorRepository;
 
     @GetMapping("/fornecedores")
-    public String showFornecedores(Model model){
-        Fornecedor fornecedor = new Fornecedor();
-
-        Pageable pageable = PageRequest.of(0, 20);
-
-        List<Fornecedor> fornecedores = fornecedorRepository.findAll(pageable).getContent();
-
+    public String showFornecedores(@RequestParam(name = "query", required = false) String query, Model model){
+        List<Fornecedor> fornecedores;
+        if (query != null && !query.isEmpty()) {
+            fornecedores = fornecedorRepository.findByNomeContainingIgnoreCase(query);
+        } else {
+            Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
+            fornecedores = fornecedorRepository.findAll(pageable).getContent();
+        }
         model.addAttribute("fornecedores", fornecedores);
-
         return "fornecedores";
     }
 
