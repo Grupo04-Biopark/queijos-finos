@@ -344,16 +344,21 @@
         </div>
 
         <div class="conteudo-index p-3">
-            <div class="w-100 flex-column align-items-center d-flex justify-content-center" style="height: 100vh;">
-                <span th:text="${mensagem}"></span>
-                <div class="w-50"></div>
-                <h1>Cadastrar Curso</h1>
+            <div class="border border-black  w-100 h-100" style="border-radius: 55px;">
+                <div class="border border-black w-100 p-4 rounded-pill shadow-lg ">
+                    <h1>Cadastrar Curso</h1>
+                </div>
+
+                <div class="w-100 flex-column align-items-center d-flex justify-content-center p-5" style="height: 70vh;">
+                    <div class="w-50">
+                    </div>
+
                 <form class="w-100" th:action="@{/cursos}" method="post">
                     <div class="mb-3">
                         <input name="nome" required type="text" style="border-color: #273C4E;" class="form-control rounded-pill" placeholder="Nome do Curso">
                     </div>
                     <div class="mb-3">
-                        <input name="professor" required type="text" style="border-color: #273C4E;" class="form-control rounded-pill" placeholder="Professor">
+                        <input name="professor" required type="text" style="border-color: #273C4E;" class="form-control rounded-pill" placeholder="Nome do Professor">
                     </div>
                     <div class="mb-3">
                         <textarea name="conteudo" required style="border-color: #273C4E;" class="form-control rounded-pill" placeholder="Conteúdo Ministrado"></textarea>
@@ -361,10 +366,11 @@
                     <div class="mb-3">
                         <input name="duracao" required type="text" style="border-color: #273C4E;" class="form-control rounded-pill" placeholder="Duração do Curso">
                     </div>
-                    <div class="d-flex justify-content-between w-auto">
+                    <div class="d-flex justify-content-end w-auto">
                         <button type="submit" class="btn btn-success rounded-pill fs-4 px-5 shadow">Cadastrar</button>
                     </div>
                 </form>
+            </div>
             </div>
         </div>
         <!-- importando script -->

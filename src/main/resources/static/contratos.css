@@ -178,3 +178,7 @@ a:visited {
 .tabela{
 	height: 100%;
 }
+
+.btn-custom {
+    width: 200px;
+}
