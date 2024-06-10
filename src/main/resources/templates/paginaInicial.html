@@ -8,7 +8,37 @@
 <body>
     <h1>pagina inicial</h1>
     <div>
-        <h2>Mensagem: <span th:text="${usu.getNome()}"></span></h2>
+        <h2>Mensagem a: <span th:text="${usu.getNome()}"></span></h2>
+        <div id="chart" style="width:500px; height:500px"></div>
     </div>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script th:inline="javascript">
+            var options = {
+              series: [
+            [[${type1Count}]],
+            [[${type2Count}]],
+            [[${type3Count}]]
+        ],
+              chart: {
+              type: 'donut',
+            },
+            colors: ['#32CD32', '#FFFF00','#FF0000'],
+            labels: ['Ativo', 'Ativos em contemplação', 'Desistentes'],
+            responsive: [{
+              breakpoint: 480,
+              options: {
+                chart: {
+                  width: 250
+                },
+                legend: {
+                  position: 'bottom'
+                }
+              }
+            }]
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render();
+</script>
 </html>
