@@ -39,12 +39,29 @@ public class PropriedadeController {
 
 
 	@GetMapping("/propriedade")
-	public String showUsuarios(Model model) {
+	public String showPropriedade(Model model) {
 		List<Propriedade> propriedade;
 		Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
 		propriedade = propriedadeRepo.findAll(pageable).getContent();
 		model.addAttribute("propriedade", propriedade);
 		return "propriedade";
+	}
+
+	@GetMapping("/propriedade/visualizar")
+	public String detailsPropriedade(@RequestParam(required = false) Long idPropriedade, Model model) {
+		Optional<Propriedade> propriedadeOptional = propriedadeRepo.findById(idPropriedade);
+
+		// Verifica se a propriedade existe
+		if (propriedadeOptional.isPresent()) {
+			Propriedade propriedade = propriedadeOptional.get();
+
+			// Adiciona a propriedade ao modelo
+			model.addAttribute("propriedade", propriedade);
+			return "visualizarPropriedade"; // Nome do arquivo Thymeleaf para a visualização da propriedade
+		} else {
+			// Se a propriedade não for encontrada, redirecione ou retorne uma página de erro
+			return "redirect:/pagina_de_erro"; // Ou retorne uma página de erro específica
+		}
 	}
 	
 	@GetMapping("/propriedade/cadastrar")

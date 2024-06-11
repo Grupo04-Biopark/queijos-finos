@@ -173,7 +173,7 @@
         <div class="conteudo-index p-3" style="overflow-y: auto; overflow-x:hidden" >
             <div class="d-flex align-items-center justify-content-between p-3 border border-black w-100">
                 <h1 class="mx-auto mb-0">Propriedades</h1>
-                <a href="/usuarios/cadastrar">
+                <a href="/propriedade/cadastrar">
                     <button class="rounded-pill shadow botaoCadastrar">+ CADASTRAR NOVO</button>
                 </a>
             </div>
@@ -264,8 +264,8 @@
                                                     <p th:text ='${prop.status}'></p>
                                                 </div>
                                                 <div class="d-flex justify-content-end">
-                                                    <button class="btn btn-secondary">Ver mais</button>
-                                                </div>
+                                                    <button class="btn btn-secondary" th:attr="data-url=@{/propriedade/visualizar(idPropriedade=${prop.idPropriedade})}"
+                                                            onclick="window.location.href = this.getAttribute('data-url')">Ver mais</button>                                                </div>
                                             </div>
                                         </div>
                                     </div>
