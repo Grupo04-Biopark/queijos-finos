@@ -182,3 +182,15 @@ a:visited {
 .btn-custom {
     width: 200px;
 }
+ .accordion-button {
+    background-color: inherit;
+    color: inherit;
+  }
+
+  /* Remove background color change on focus and active states */
+  .accordion-button:focus,
+  .accordion-button:not(.collapsed) {
+    background-color: inherit;
+    color: inherit;
+    box-shadow: none;
+  }

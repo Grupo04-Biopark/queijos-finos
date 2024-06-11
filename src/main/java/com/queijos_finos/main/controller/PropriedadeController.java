@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.queijos_finos.main.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,11 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.queijos_finos.main.model.Contrato;
-import com.queijos_finos.main.model.Curso;
-import com.queijos_finos.main.model.Fornecedor;
-import com.queijos_finos.main.model.Propriedade;
-import com.queijos_finos.main.model.Tecnologias;
 import com.queijos_finos.main.repository.ContratoRepository;
 import com.queijos_finos.main.repository.CursosRepository;
 import com.queijos_finos.main.repository.FornecedorRepository;
@@ -40,6 +36,16 @@ public class PropriedadeController {
 	private TecnologiaRepository tecnologiaRepo;
 	@Autowired
 	private FornecedorRepository fornecedorRepo;
+
+
+	@GetMapping("/propriedade")
+	public String showUsuarios(Model model) {
+		List<Propriedade> propriedade;
+		Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
+		propriedade = propriedadeRepo.findAll(pageable).getContent();
+		model.addAttribute("propriedade", propriedade);
+		return "propriedade";
+	}
 	
 	@GetMapping("/propriedade/cadastrar")
 	public String createContratoView(@RequestParam(required = false) Long idPropriedade,
