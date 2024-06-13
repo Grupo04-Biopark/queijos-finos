@@ -190,9 +190,18 @@
                         </div>
                         <!-- Mapa -->
                         <div class="col-md-7 d-flex align-items-center justify-content-center">
-                            <img src="
-                                https://www.cnnbrasil.com.br/wp-content/uploads/sites/12/2024/02/google-maps-e1707316052388.png?w=1220&h=674&crop=1"
-                                 alt="" class="" style="max-height: 300px; width:auto">
+                            <div style="width: 100%">
+                                <iframe
+                                    id="map"
+                                    width="100%"
+                                    height="300"
+                                    frameborder="0"
+                                    style="border:0"
+                                    allowfullscreen
+                                    aria-hidden="false"
+                                    tabindex="0">
+                            </iframe></div>
+
                         </div>
                     </div>
                     <div class="d-flex-row mt-5 justify-items-start">
@@ -242,42 +251,107 @@
 
 
                 <!-- Tabelas Cursos e tecnologia -->
-                <div class="ms-5 me-5 mt-5 d-flex">
-                    <div class="w-100 me-5" style="border-radius: 10px;">
-                        <div class="d-flex justify-content-between p-2">
-                            <h1>Cursos</h1>
-                            <button data-bs-toggle="modal" data-bs-target="#tecModal"
-                                    class="btn btn-secondary m-2">Adcionar</button>
+                <div class="w-100 d-flex justify-content-betwen">
+                    <div class="w-50 m-2">
+                        <div class="d-flex align-items-center m-2">
+                            <p class="m-3 fs-3">Cursos</p>
+                            <button type="button" class="btn rounded-pill" style="background-color: #273C4E; height: 50px; color: white" data-toggle="modal" data-target="#exampleModalCenter">Adicionar curso</button>
+
                         </div>
+                        <div class="border border-black w-100 overflow-auto p-3 rounded" style="height: 400px; width: 400px;">
 
-                        <div class="border border-black w-100 p-2" style="height: 350px; border-radius: 10px;">
-
-                            <!-- Conteudo data table de curso -->
+                            <table class="table-stripe stripe" id="cursosTable">
+                                <thead>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Conteudo</th>
+                                <th scope="col">Professor</th>
+                                <th scope="col">Duração</th>
+                                <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody th:if="${propriedade != null}" >
+                                <tr class="border tr" th:id="${curso.getId()}" th:each="curso : ${propriedade.getCursos()}">
+                                    <th class="cursoID" th:id="${curso.getId()}" th:text="${curso.getNome()}"></th>
+                                    <td th:text="${curso.getConteudo()}"></td>
+                                    <td th:text="${curso.getProfessor()}"></td>
+                                    <td th:text="${curso.getDuracao()}"></td>
+                                    <td>
+                                        <button type="button" th:onclick="'removerCurso(\'' + ${curso.getId()} + '\');'" class="btn btn-danger rounded-pill px-3 shadow ">
+                                            x
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="w-100 ms-5" style="border-radius: 10px;">
-                        <div class="d-flex justify-content-between p-2">
-                            <h1>Tecnologias</h1>
-                            <button data-bs-toggle="modal" data-bs-target="#cursoModal"
-                                    class="btn btn-secondary m-2">Adcionar</button>
+                    <div class="w-50 m-2">
+                        <div class="d-flex align-items-center m-2">
+                            <p class="m-3 fs-3">Tecnologias</p>
+                            <select class="form-control tecnologiaSelect" id="tecnologiaSelect" >
+                                <option  selected="selected"></option>
+                                <option th:value="${tecnologia.getId()}" th:each="tecnologia : ${tecnologias}" th:text="${tecnologia.getNome()}"></option>
+                            </select>
+                            <button type="button" class="btn rounded-pill m-2" style="background-color: #273C4E; height: 50px; color: white" onclick="adicionarTecnologia()">ADD</button>
                         </div>
-                        <div class="border border-black w-100" style="height: 350px; border-radius: 10px;">
-                            <!-- Conteudo data table de Tecnologias -->
+                        <div class="border border-black w-100 overflow-auto p-3 rounded" style="height: 400px; width: 400px;">
 
+                            <table class="table-stripe stripe" id="tecnologiasTable">
+                                <thead>
+                                <th scope="col">Nome</th>
+                                <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody th:if="${propriedade != null}" >
+                                <tr class="border tr tecnologiaAdd" th:id="${tecnologia.getId()}" th:each="tecnologia : ${propriedade.getTecnologias()}">
+                                    <th class="tecnologiaID" th:id="${tecnologia.getId()}" th:text="${tecnologia.getNome()}"></th>
+                                    <td>
+                                        <button type="button" th:onclick="'removerTecnologia(\'' + ${tecnologia.getId()} + '\');'" class="btn btn-danger rounded-pill px-3 shadow ">
+                                            x
+                                        </button>
+                                    </td>
+
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
+                    </div>
+                    <div>
+
                     </div>
                 </div>
 
 
                 <!-- Fornecedores da propriedade -->
-                <div class="d-flex flex-column border border-black m-5" style="border-radius: 10px; height: 600px;">
-                    <div class="text-center">
-                        <h1>Fornecedores</h1>
-                    </div>
-                    <div class="mt-auto mb-2 d-flex justify-content-center">
-                        <button data-bs-toggle="modal" data-bs-target="#fornecedoresModal"
-                                class="btn btn-success">Adicionar</button>
-                    </div>
+                <div class="w-100 border border-black rounded overflow-auto" style="height: 600px; margin-top: 100px;">
+                    <p class="text-center fs-2">Fornecedores
+                        <button type="button" class="btn rounded-pill" style="background-color: #273C4E; height: 50px; color: white" data-toggle="modal" data-target="#fornecedorModal">Adicionar Fornecedor</button>
+                    </p>
+
+                    <table class="table-stripe stripe" id="fornecedorTable">
+                        <thead>
+                        <tr class="">
+                            <th scope="col">Nome</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Nicho</th>
+                            <th scope="col">Qualidade</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody th:if="${propriedade != null}">
+                        <tr class="border user-row" th:id="${fornecedor.getId()}" th:each="fornecedor : ${propriedade.getFornecedores()}">
+                            <td class="fornecedorID" th:id="${fornecedor.getId()}" th:text="${fornecedor.getNome()}"></td>
+                            <td th:text="${fornecedor.getEmail()}"></td>
+                            <td th:text="${fornecedor.getNicho()}"></td>
+                            <td th:text="${fornecedor.getQualidade()}"></td>
+                            <td>
+                                <button type="button" th:onclick="'removerFornecedor(\'' + ${fornecedor.getId()} + '\');'" class="btn btn-danger rounded-pill px-3 shadow ">
+                                    x
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
 
             </div>
@@ -289,19 +363,76 @@
         <!-- Modal amostras -->
         <div class="modal fade" id="amostraModal" tabindex="-1" aria-labelledby="amostraModal
                     aria-hidden=" true>
-            <div class="modal-dialog modal-fullscreen modal-dialog-centered">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="amostraModal">Modal title</h1>
+                    <div class="modal-header" >
+
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body p-0">
+                        <div class="conteudo-index p-3" style="max-height:88vh"  >
+                            <div class="border border-black  w-100 h-100 " style="border-radius: 55px;">
+                                <div class="border border-black w-100 p-4 rounded-pill shadow-lg ">
+                                    <h1>Nova Amostra</h1>
+                                </div>
+                                <div class="w-100 flex-column align-items-center d-flex justify-content-start p-5"
+                                     style="height: auto;">
+                                    <form class="w-100">
+                                        <div class="mb-3">
+                                            <div class="mb-3 d-flex-row align-items-center">
+                                                <h4 class="ms-2 me-2">Data de emissão</h4>
+                                                <input required type="date" style="border-color: #273C4E; width: 230px;"
+                                                       class="form-control rounded-pill" aria-describedby="emailHelp"
+                                                       placeholder="Nome">
+                                            </div>
 
+                                            <div class="mb-3 d-flex-row align-items-center">
+                                                <h4 class="ms-2 me-2">Amostra</h4>
+                                                <input required type="file" style="border-color: #273C4E;"
+                                                       class="form-control rounded-pill w-100" aria-describedby="emailHelp"
+                                                       placeholder="Nome">
+                                            </div>
+
+                                            <div class=" m-0 p-0 mb-5 w-100">
+                                                <div class="row">
+                                                    <div class="col-4 align-items-center">
+                                                        <h4 class="ms-2 me-2">Quantidade/Queijo</h4>
+                                                        <input required type="number" style="border-color: #273C4E; width: 230px;"
+                                                               class="form-control rounded-pill" aria-describedby="emailHelp"
+                                                               placeholder="Kg">
+                                                        <h4 class="ms-2 me-2 mt-2">Quantidade/Leite</h4>
+                                                        <input required type="number" style="border-color: #273C4E; width: 230px;"
+                                                               class="form-control rounded-pill" aria-describedby="emailHelp"
+                                                               placeholder="Litros">
+                                                    </div>
+                                                    <div class="col align-items-center">
+                                                        <h4>Observações</h4>
+                                                        <textarea required type="Text" style="border-color: #273C4E; height:77%;"
+                                                                  class="form-control w-100 " aria-describedby="emailHelp"
+                                                                  placeholder=""></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="d-flex justify-content-end w-auto">
+                                                <button  th:text="${amostra != null}? 'Atualizar' : 'Cadastrar'"
+                                                        class="btn btn-success rounded-pill fs-4 px-5 shadow" style="width: 200px;" data-bs-dismiss="modal" >Salvar</button>
+                                            </div>
+                                    </form>
+
+                                    <form th:if="${usuario != null}" th:action="@{/usuarios/delete/{id}(id=${usuario.idUsuario})}"
+                                          th:method="delete">
+                                        <div class="d-flex justify-content-end w-auto" >
+                                            <button type="submit" th:text="${propriedade != null}? 'Atualizar' : 'Cadastrar'"
+                                                    class="btn btn-danger rounded-pill fs-4 px-5 mt-2 shadow" style="width: 200px;" data-bs-dismiss="modal" >Sair</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-success">Adicionar</button>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -368,7 +499,20 @@
 
 
 
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            function updateMap(latitude, longitude) {
+                var iframe = document.getElementById('map');
+                var iframeSrc = `https://maps.google.com/maps?width=100%&height=300&hl=en&q=${latitude},${longitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`;
+                iframe.src = iframeSrc;
+            }
 
+            var latitude = /*[[${propriedade.latitude}]]*/ 'default_latitude';
+            var longitude = /*[[${propriedade.longitude}]]*/ 'default_longitude';
+
+            updateMap(latitude, longitude);
+            /*]]>*/
+        </script>
         <!-- Include jQuery -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <!-- Include DataTables JS -->
@@ -487,6 +631,8 @@
             var chart = new ApexCharts(document.querySelector("#chart"), options);
             chart.render();
         </script>
+
+
 
 </body>
 

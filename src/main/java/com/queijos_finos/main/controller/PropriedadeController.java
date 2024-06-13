@@ -50,18 +50,9 @@ public class PropriedadeController {
 	@GetMapping("/propriedade/visualizar")
 	public String detailsPropriedade(@RequestParam(required = false) Long idPropriedade, Model model) {
 		Optional<Propriedade> propriedadeOptional = propriedadeRepo.findById(idPropriedade);
-
-		// Verifica se a propriedade existe
-		if (propriedadeOptional.isPresent()) {
-			Propriedade propriedade = propriedadeOptional.get();
-
-			// Adiciona a propriedade ao modelo
-			model.addAttribute("propriedade", propriedade);
-			return "visualizarPropriedade"; // Nome do arquivo Thymeleaf para a visualização da propriedade
-		} else {
-			// Se a propriedade não for encontrada, redirecione ou retorne uma página de erro
-			return "redirect:/pagina_de_erro"; // Ou retorne uma página de erro específica
-		}
+		Propriedade propriedade = propriedadeOptional.get();
+		model.addAttribute("propriedade", propriedade);
+		return "visualizarPropriedade"; // Nome do arquivo Thymeleaf para a visualização da propriedade
 	}
 	
 	@GetMapping("/propriedade/cadastrar")
