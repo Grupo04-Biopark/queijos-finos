@@ -73,6 +73,11 @@ public class PropriedadeController {
 		return "redirect:/propriedade/visualizar?idPropriedade=" + propriedadeId;
 	}
 
+	@DeleteMapping("/amostra/delete/{id}")
+	public void deleteAmostra(@PathVariable("id") Long id) {
+		amostraRepo.deleteById(id); // Remove a amostra pelo ID fornecido
+	}
+
 
 
 

@@ -256,13 +256,31 @@
                                 <td th:text="${amostra.getQuantidadeleite()}"></td>
                                 <td th:text="${amostra.getQuantidadeQueijo()}"></td>
                                 <td>
-                                    <button type="button" class="btn btn-danger rounded-pill px-3 shadow">
-                                        x
-                                    </button>
+                                        <button type="button" th:onclick="'removerAmostra(\'' + ${amostra.getId()} + '\');'" class="btn btn-danger rounded-pill px-3 shadow ">
+                                            x
+                                        </button>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
+                        <script>
+                            function removerAmostra(id) {
+                                // Solicitação DELETE para excluir a amostra
+                                $.ajax({
+                                    url: '/amostra/delete/' + id,
+                                    type: 'DELETE',
+                                    success: function(response) {
+                                        // Remover a linha da tabela DataTables
+                                        var dataTable = $('#myTable').DataTable();
+                                        dataTable.row('#' + id).remove().draw();
+                                    },
+                                    error: function(xhr, status, error) {
+                                       var dataTable = $('#myTable').DataTable();
+                                        dataTable.row('#' + id).remove().draw();
+                                    }
+                                });
+                            }
+                        </script>
                     </div>
                     <div class="d-flex justify-content-center align-items-end p-2"
                          style="border-top: 1px solid black;">
@@ -536,8 +554,7 @@
               	lengthChange: false,
   				info: false,
   				"columnDefs": [
-                    { "type": "date-eu", "targets": 0 },
-
+                    { "type": "date-eu", "targets": 1 },
                 ]
 
 
