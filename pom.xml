@@ -51,6 +51,7 @@
 			<artifactId>crud_mysql</artifactId>
 			<version>3.2.3</version>
 		</dependency>
+		
 	</dependencies>
 
 	<build>

@@ -4,6 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,6 +25,7 @@ public class Contrato {
 	
 	@ManyToOne
 	@JoinColumn(name="Propriedade_idPropriedade")
+	@JsonBackReference
 	private Propriedade propriedade;
 	
 	
@@ -89,13 +93,13 @@ public class Contrato {
 	public String getDataVercimentoString() {
 		SimpleDateFormat formatoSaida = new SimpleDateFormat("y-MM-dd");
 	    String dataFormatada = formatoSaida.format(dataVercimento);
-	    System.out.println(dataFormatada);
+	    
 		return dataFormatada;
 	}
 	public String getDataEmissaoString() {
 		SimpleDateFormat formatoSaida = new SimpleDateFormat("y-MM-dd");
 	    String dataFormatada = formatoSaida.format(dataEmissao);
-	    System.out.println(dataFormatada);
+	  
 		return dataFormatada;
 	}
 	

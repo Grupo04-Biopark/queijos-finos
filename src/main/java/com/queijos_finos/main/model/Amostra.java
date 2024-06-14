@@ -3,6 +3,7 @@ package com.queijos_finos.main.model;
 import java.util.Date;
 import java.util.Objects;
 
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,14 +20,14 @@ public class Amostra {
 	private Double quantidadeleite;
 	private Double quantidadeQueijo;
 	private String observacao;
-	
+
 	@ManyToOne
 	@JoinColumn(name="Propriedade_idPropriedade")
 	private Propriedade propriedade;
-	
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(Id, data, observacao, quantidadeQueijo, quantidadeleite);
+		return Objects.hash(Id, data, observacao, quantidadeQueijo, quantidadeleite,propriedade);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -40,7 +41,8 @@ public class Amostra {
 		return Objects.equals(Id, other.Id) && Objects.equals(data, other.data)
 				&& Objects.equals(observacao, other.observacao)
 				&& Objects.equals(quantidadeQueijo, other.quantidadeQueijo)
-				&& Objects.equals(quantidadeleite, other.quantidadeleite);
+				&& Objects.equals(quantidadeleite, other.quantidadeleite)
+				&& Objects.equals(propriedade, other.propriedade);
 	}
 	public Long getId() {
 		return Id;
@@ -73,4 +75,11 @@ public class Amostra {
 		this.observacao = observacao;
 	}
 
+	public Propriedade getPropriedade() {
+		return propriedade;
+	}
+
+	public void setPropriedade(Propriedade propriedade) {
+		this.propriedade = propriedade;
+	}
 }
