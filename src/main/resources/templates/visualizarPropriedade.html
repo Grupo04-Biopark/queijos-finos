@@ -263,24 +263,7 @@
                             </tr>
                             </tbody>
                         </table>
-                        <script>
-                            function removerAmostra(id) {
-                                // Solicitação DELETE para excluir a amostra
-                                $.ajax({
-                                    url: '/amostra/delete/' + id,
-                                    type: 'DELETE',
-                                    success: function(response) {
-                                        // Remover a linha da tabela DataTables
-                                        var dataTable = $('#myTable').DataTable();
-                                        dataTable.row('#' + id).remove().draw();
-                                    },
-                                    error: function(xhr, status, error) {
-                                       var dataTable = $('#myTable').DataTable();
-                                        dataTable.row('#' + id).remove().draw();
-                                    }
-                                });
-                            }
-                        </script>
+
                     </div>
                     <div class="d-flex justify-content-center align-items-end p-2"
                          style="border-top: 1px solid black;">
@@ -299,7 +282,6 @@
                     <div class="w-50 me-2 p-2">
                         <div class="d-flex align-items-center m-2">
                             <p class="m-3 fs-3">Cursos</p>
-                            <button type="button" class="btn rounded-pill" style="background-color: #273C4E; height: 50px; color: white" data-toggle="modal" data-target="#exampleModalCenter">Adicionar curso</button>
 
                         </div>
                         <div class="border border-black w-100 overflow-auto p-3 rounded" style="height: 400px; width: 400px;">
@@ -320,9 +302,7 @@
                                     <td th:text="${curso.getProfessor()}"></td>
                                     <td th:text="${curso.getDuracao()}"></td>
                                     <td>
-                                        <button type="button" th:onclick="'removerCurso(\'' + ${curso.getId()} + '\');'" class="btn btn-danger rounded-pill px-3 shadow ">
-                                            x
-                                        </button>
+
                                     </td>
                                 </tr>
                                 </tbody>
@@ -332,11 +312,7 @@
                     <div class="w-50 ms-2 p-2">
                         <div class="d-flex align-items-center m-2">
                             <p class="m-3 fs-3">Tecnologias</p>
-                            <select class="form-control tecnologiaSelect" id="tecnologiaSelect" >
-                                <option  selected="selected"></option>
-                                <option th:value="${tecnologia.getId()}" th:each="tecnologia : ${tecnologias}" th:text="${tecnologia.getNome()}"></option>
-                            </select>
-                            <button type="button" class="btn rounded-pill m-2" style="background-color: #273C4E; height: 50px; color: white" onclick="adicionarTecnologia()">ADD</button>
+
                         </div>
                         <div class="border border-black w-100 overflow-auto p-3 rounded" style="height: 400px; width: 400px;">
 
@@ -350,9 +326,7 @@
                                 <tr class="border tr tecnologiaAdd" th:id="${tecnologia.getId()}" th:each="tecnologia : ${propriedade.getTecnologias()}">
                                     <th class="tecnologiaID" th:id="${tecnologia.getId()}" th:text="${tecnologia.getNome()}"></th>
                                     <td>
-                                        <button type="button" th:onclick="'removerTecnologia(\'' + ${tecnologia.getId()} + '\');'" class="btn btn-danger rounded-pill px-3 shadow ">
-                                            x
-                                        </button>
+
                                     </td>
 
                                 </tr>
@@ -369,7 +343,7 @@
                 <!-- Fornecedores da propriedade -->
                 <div class=" border border-black rounded overflow-auto me-5 ms-5 p-2" style="height: 600px; margin-top: 100px;">
                     <p class="text-center fs-2">Fornecedores
-                        <button type="button" class="btn rounded-pill" style="background-color: #273C4E; height: 50px; color: white" data-toggle="modal" data-target="#fornecedorModal">Adicionar Fornecedor</button>
+
                     </p>
 
                     <table class="table-stripe stripe w-100" id="fornecedorTable">
@@ -389,9 +363,7 @@
                             <td th:text="${fornecedor.getNicho()}"></td>
                             <td th:text="${fornecedor.getQualidade()}"></td>
                             <td>
-                                <button type="button" th:onclick="'removerFornecedor(\'' + ${fornecedor.getId()} + '\');'" class="btn btn-danger rounded-pill px-3 shadow ">
-                                    x
-                                </button>
+
                             </td>
                         </tr>
                         </tbody>
@@ -400,33 +372,6 @@
 
             </div>
         </div>
-
-        <form action="/amostras" method="post" onsubmit="formatarData(event)">
-            <input type="hidden" name="propriedadeId" th:value="${propriedade.idPropriedade}" />
-
-            <div class="form-group">
-                <label for="data">Data:</label>
-                <input type="date" id="data" name="data" class="form-control" />
-            </div>
-
-            <div class="form-group">
-                <label for="quantidadeleite">Quantidade de Leite:</label>
-                <input type="number" id="quantidadeleite" name="quantidadeleite" step="0.01" class="form-control" required />
-            </div>
-
-            <div class="form-group">
-                <label for="quantidadeQueijo">Quantidade de Queijo:</label>
-                <input type="number" id="quantidadeQueijo" name="quantidadeQueijo" step="0.01" class="form-control" required />
-            </div>
-
-            <div class="form-group">
-                <label for="observacao">Observação:</label>
-                <textarea id="observacao" name="observacao" class="form-control"></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Salvar Amostra</button>
-        </form>
-
 
 
 
@@ -448,7 +393,7 @@
                                 <div class="w-100 flex-column align-items-center d-flex justify-content-start p-5"
                                      style="height: auto;">
                                     <form class="w-100" action="/amostras" method="post">
-                                        <input name="propriedadeId" th:value="${propriedade.getIdPropriedade()}">
+                                        <input type="hidden" name="propriedadeId" th:value="${propriedade.getIdPropriedade()}">
                                         <div class="mb-3">
                                             <div class="mb-3 d-flex-row align-items-center">
                                                 <h4 class="ms-2 me-2">Data de emissão</h4>
@@ -508,7 +453,24 @@
         </div>
 
 
-
+        <script>
+            function removerAmostra(id) {
+                // Solicitação DELETE para excluir a amostra
+                $.ajax({
+                    url: '/amostra/delete/' + id,
+                    type: 'DELETE',
+                    success: function(response) {
+                        // Remover a linha da tabela DataTables
+                        var dataTable = $('#myTable').DataTable();
+                        dataTable.row('#' + id).remove().draw();
+                    },
+                    error: function(xhr, status, error) {
+                       var dataTable = $('#myTable').DataTable();
+                        dataTable.row('#' + id).remove().draw();
+                    }
+                });
+            }
+        </script>
         <script th:inline="javascript">
             /*<![CDATA[*/
             function updateMap(latitude, longitude) {
@@ -544,27 +506,29 @@
 
         <!-- Script para -->
         <script>
-            $(document).ready(function () {
+            $.fn.dataTable.ext.type.order['date-br-pre'] = function (data) {
+             var parts = data.split('/');
+            return new Date(parts[2], parts[1] - 1, parts[0]); // Ano, mês (zero-indexado), dia
+         };
 
-                $('#myTable').DataTable();
-            });
-            new DataTable('#myTable', {
-                paging: false,
-                scrollCollapse: true,
-              	lengthChange: false,
-  				info: false,
-  				"columnDefs": [
-                    { "type": "date-eu", "targets": 1 },
-                ]
+         $(document).ready(function () {
+             $('#myTable').DataTable({
+                 paging: false,
+                 scrollCollapse: true,
+                 lengthChange: false,
+                 info: false,
+                 columnDefs: [
+                     { type: 'date-br', targets: 1 }
+                 ],
 
-
-            });
+             });
+         });
         </script>
 
 
         <!-- Script para tabela de leites -->
         <script>
-            // Estrutura de dados para armazenar a produção de leite por ano e mês
+            // Estrutura de dados para armazenar a produção de leite e queijos por ano e mês
             var dadosProducao = {};
 
             // Função para inicializar os dados com a estrutura vazia para cada ano e mês
@@ -577,6 +541,7 @@
                     var colunas = linha.getElementsByTagName("td");
                     var data = colunas[1].textContent.trim(); // Data no formato 'dd/MM/yyyy'
                     var quantidadeLeite = parseInt(colunas[2].textContent.trim(), 10); // Quantidade de leite como número inteiro
+                    var quantidadeQueijo = parseInt(colunas[3].textContent.trim(), 10); // Quantidade de queijo como número inteiro
 
                     // Extrair o ano e mês da data
                     var partesData = data.split("/");
@@ -590,11 +555,15 @@
 
                     // Verificar se já existe entrada para o mês, senão criar
                     if (!dadosProducao[ano][mes]) {
-                        dadosProducao[ano][mes] = 0;
+                        dadosProducao[ano][mes] = {
+                            leite: 0,
+                            queijo: 0
+                        };
                     }
 
-                    // Adicionar a quantidade de leite ao mês correspondente
-                    dadosProducao[ano][mes] += quantidadeLeite;
+                    // Adicionar a quantidade de leite e queijo ao mês correspondente
+                    dadosProducao[ano][mes].leite += quantidadeLeite;
+                    dadosProducao[ano][mes].queijo += quantidadeQueijo;
                 });
             }
 
@@ -606,6 +575,9 @@
                 series: [{
                     name: 'Leite',
                     data: [] // Os dados serão definidos dinamicamente ao filtrar por ano
+                }, {
+                    name: 'Queijo',
+                    data: [] // Os dados serão definidos dinamicamente ao filtrar por ano
                 }],
                 chart: {
                     height: 350,
@@ -613,91 +585,47 @@
                 },
                 plotOptions: {
                     bar: {
-                        borderRadius: 10,
-                        dataLabels: {
-                            position: 'top', // top, center, bottom
-                        },
-                    }
+                        horizontal: false,
+                        columnWidth: '55%',
+                        endingShape: 'rounded'
+                    },
                 },
                 dataLabels: {
-                    enabled: true,
-                    formatter: function(val) {
-                        return val + "L";
-                    },
-                    offsetY: -20,
-                    style: {
-                        fontSize: '12px',
-                        colors: ["#304758"]
-                    }
+                    enabled: true
+                },
+                stroke: {
+                    show: true,
+                    width: 2,
+                    colors: ['transparent']
                 },
                 xaxis: {
-                    categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                    position: 'top',
-                    axisBorder: {
-                        show: false
-                    },
-                    axisTicks: {
-                        show: false
-                    },
-                    crosshairs: {
-                        fill: {
-                            type: 'gradient',
-                            gradient: {
-                                colorFrom: '#D8E3F0',
-                                colorTo: '#BED1E6',
-                                stops: [0, 100],
-                                opacityFrom: 0.4,
-                                opacityTo: 0.5,
-                            }
-                        }
-                    },
-                    tooltip: {
-                        enabled: true,
-                    }
+                    categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", " Oct", " Nov", " Dec"],
                 },
                 yaxis: {
-                    axisBorder: {
-                        show: false
-                    },
-                    axisTicks: {
-                        show: false,
-                    },
-                    labels: {
-                        show: false,
-                        formatter: function(val) {
-                            return val + "%";
-                        }
+                    title: {
+                        text: 'Quantidade'
                     }
                 },
-                title: {
-                    text: 'Produção mensal de leite',
-                    floating: true,
-                    offsetY: 330,
-                    align: 'center',
-                    style: {
-                        color: '#444'
+                fill: {
+                    opacity: 1
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return val + " unidades"
+                        }
                     }
                 }
             };
 
             var chart = new ApexCharts(document.querySelector("#chart"), options);
+
             chart.render();
-
-
-
-            var anosDisponiveis = Object.keys(dadosProducao);
-            if (anosDisponiveis.length > 0) {
-                // Encontrar o ano mais recente
-                var anoMaisRecente = anosDisponiveis.reduce(function(a, b) {
-                    return Math.max(a, b);
-                });
-                // Filtrar pelo ano mais recente
-                filtrarPorAno(anoMaisRecente);
-            }
 
             // Função para filtrar e atualizar o gráfico com base no ano selecionado
             function filtrarPorAno(anoSelecionado) {
                 var dataLeite = [];
+                var dataQueijo = [];
 
                 // Verificar se existem dados para o ano selecionado
                 if (dadosProducao[anoSelecionado]) {
@@ -705,27 +633,32 @@
                     for (var i = 1; i <= 12; i++) {
                         // Se houver dados para o mês, adicionar à lista de dados do gráfico
                         if (dadosProducao[anoSelecionado][i]) {
-                            dataLeite.push(dadosProducao[anoSelecionado][i]);
+                            dataLeite.push(dadosProducao[anoSelecionado][i].leite);
+                            dataQueijo.push(dadosProducao[anoSelecionado][i].queijo);
                         } else {
                             // Caso não haja dados para o mês, adicionar 0 para manter a ordem
                             dataLeite.push(0);
+                            dataQueijo.push(0);
                         }
                     }
                 } else {
                     // Se não houver dados para o ano selecionado, preencher com zeros
                     dataLeite = Array(12).fill(0);
+                    dataQueijo = Array(12).fill(0);
                 }
 
-                // Atualiza os dados do gráfico com os dados de leite do ano selecionado
+                // Atualiza os dados do gráfico com os dados de leite e queijo do ano selecionado
                 chart.updateSeries([{
+                    name: 'Leite',
                     data: dataLeite
+                }, {
+                    name: 'Queijo',
+                    data: dataQueijo
                 }]);
-
-
             }
 
             // Função para retornar todos os anos disponíveis nos dados e atualizar o <select>
-                function atualizarSelectAnos() {
+            function atualizarSelectAnos() {
                 var selectAno = document.getElementById('selectYear');
                 var anosDisponiveis = Object.keys(dadosProducao);
 
