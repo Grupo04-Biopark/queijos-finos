@@ -175,6 +175,8 @@
             <div class="border border-black  w-100 " style="border-radius: 55px">
                 <div class="d-flex justify-content-center p-2">
                     <h1 th:text="${propriedade.nomePropriedade}" class=""></h1>
+                    <button class="btn btn-secondary" th:attr="data-url=@{/propriedade/cadastrar(idPropriedade=${propriedade.idPropriedade})}"
+                            onclick="window.location.href = this.getAttribute('data-url')">Editar</button>
                 </div>
                 <div class="w-100 " style="padding: 48px;">
                     <div class="row ">
@@ -214,8 +216,15 @@
                         <p class="m-0">UF:PR: <span th:text="${propriedade.UF}" class="m-0"></span></p>
                     </div>
                 </div>
+                <div class="ps-5">
+                    <label for="selectYear">Selecione o ano:</label>
+                    <select id="selectYear" onchange="filtrarPorAno(this.value)">
+                        <!-- As opções serão adicionadas dinamicamente pelo JavaScript -->
+                    </select>
+                </div>
                 <div class="border border-black ms-5 me-5 p-2" id="chart"
                      style="border-radius: 10px; height: 250px; ">
+
                     <!-- div da tabela de leites -->
                 </div>
 
@@ -228,17 +237,32 @@
                     <div style="border-bottom: 1px solid black;">
                         <h1 class="text-center">Amostras</h1>
                     </div>
-                    <div class="d-flex flex-wrap flex-grow-1 gap-3 p-2" style="overflow-y: auto;">
-                        <!-- Conteúdo dos cards aqui -->
-                        <div class="card text-center text-secondary d-flex justify-content-center align-items-center"
-                             style="border: 1px solid; height: 100px; width: 200px;">
-                            <h1>Amostra 1</h1>
-                        </div>
-                        <div class="card text-center text-secondary d-flex justify-content-center align-items-center"
-                             style="border: 1px solid; height: 100px; width: 200px;">
-                            <h1>Amostra 2</h1>
-                        </div>
-                        <!-- Adicione mais cards conforme necessário -->
+                    <div class="h-100 p-2" style="overflow-y: auto;">
+
+                        <table class="table-stripe stripe h-100 w-100" id="myTable">
+                            <thead>
+                            <tr>
+                                <th scope="col">Amostra</th>
+                                <th scope="col">Data</th>
+                                <th scope="col">Leite</th>
+                                <th scope="col">Queijo</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody th:if="${propriedade != null}">
+                            <tr class="border user-row" th:id="${amostra.getId()}" th:each="amostra, status : ${propriedade.getAmostras()}" th:short="${amostra.getData()}">
+                                <td th:text="'Amostra ' + ${status.index + 1}"></td>
+                                <td th:text="${#dates.format(amostra.getData(), 'dd/MM/yyyy')}"></td>
+                                <td th:text="${amostra.getQuantidadeleite()}"></td>
+                                <td th:text="${amostra.getQuantidadeQueijo()}"></td>
+                                <td>
+                                    <button type="button" class="btn btn-danger rounded-pill px-3 shadow">
+                                        x
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="d-flex justify-content-center align-items-end p-2"
                          style="border-top: 1px solid black;">
@@ -250,9 +274,11 @@
 
 
 
+
+
                 <!-- Tabelas Cursos e tecnologia -->
-                <div class="w-100 d-flex justify-content-betwen">
-                    <div class="w-50 m-2">
+                <div class="ms-5 me-5 d-flex justify-content-betwen">
+                    <div class="w-50 me-2 p-2">
                         <div class="d-flex align-items-center m-2">
                             <p class="m-3 fs-3">Cursos</p>
                             <button type="button" class="btn rounded-pill" style="background-color: #273C4E; height: 50px; color: white" data-toggle="modal" data-target="#exampleModalCenter">Adicionar curso</button>
@@ -285,7 +311,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="w-50 m-2">
+                    <div class="w-50 ms-2 p-2">
                         <div class="d-flex align-items-center m-2">
                             <p class="m-3 fs-3">Tecnologias</p>
                             <select class="form-control tecnologiaSelect" id="tecnologiaSelect" >
@@ -296,7 +322,7 @@
                         </div>
                         <div class="border border-black w-100 overflow-auto p-3 rounded" style="height: 400px; width: 400px;">
 
-                            <table class="table-stripe stripe" id="tecnologiasTable">
+                            <table class="table-stripe stripe w-100" id="tecnologiasTable">
                                 <thead>
                                 <th scope="col">Nome</th>
                                 <th scope="col"></th>
@@ -323,12 +349,12 @@
 
 
                 <!-- Fornecedores da propriedade -->
-                <div class="w-100 border border-black rounded overflow-auto" style="height: 600px; margin-top: 100px;">
+                <div class=" border border-black rounded overflow-auto me-5 ms-5 p-2" style="height: 600px; margin-top: 100px;">
                     <p class="text-center fs-2">Fornecedores
                         <button type="button" class="btn rounded-pill" style="background-color: #273C4E; height: 50px; color: white" data-toggle="modal" data-target="#fornecedorModal">Adicionar Fornecedor</button>
                     </p>
 
-                    <table class="table-stripe stripe" id="fornecedorTable">
+                    <table class="table-stripe stripe w-100" id="fornecedorTable">
                         <thead>
                         <tr class="">
                             <th scope="col">Nome</th>
@@ -357,6 +383,32 @@
             </div>
         </div>
 
+        <form action="/amostras" method="post" onsubmit="formatarData(event)">
+            <input type="hidden" name="propriedadeId" th:value="${propriedade.idPropriedade}" />
+
+            <div class="form-group">
+                <label for="data">Data:</label>
+                <input type="date" id="data" name="data" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="quantidadeleite">Quantidade de Leite:</label>
+                <input type="number" id="quantidadeleite" name="quantidadeleite" step="0.01" class="form-control" required />
+            </div>
+
+            <div class="form-group">
+                <label for="quantidadeQueijo">Quantidade de Queijo:</label>
+                <input type="number" id="quantidadeQueijo" name="quantidadeQueijo" step="0.01" class="form-control" required />
+            </div>
+
+            <div class="form-group">
+                <label for="observacao">Observação:</label>
+                <textarea id="observacao" name="observacao" class="form-control"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Salvar Amostra</button>
+        </form>
+
 
 
 
@@ -377,18 +429,19 @@
                                 </div>
                                 <div class="w-100 flex-column align-items-center d-flex justify-content-start p-5"
                                      style="height: auto;">
-                                    <form class="w-100">
+                                    <form class="w-100" action="/amostras" method="post">
+                                        <input name="propriedadeId" th:value="${propriedade.getIdPropriedade()}">
                                         <div class="mb-3">
                                             <div class="mb-3 d-flex-row align-items-center">
                                                 <h4 class="ms-2 me-2">Data de emissão</h4>
-                                                <input required type="date" style="border-color: #273C4E; width: 230px;"
+                                                <input name="data"  type="date" style="border-color: #273C4E; width: 230px;"
                                                        class="form-control rounded-pill" aria-describedby="emailHelp"
                                                        placeholder="Nome">
                                             </div>
 
                                             <div class="mb-3 d-flex-row align-items-center">
                                                 <h4 class="ms-2 me-2">Amostra</h4>
-                                                <input required type="file" style="border-color: #273C4E;"
+                                                <input  type="file" style="border-color: #273C4E;"
                                                        class="form-control rounded-pill w-100" aria-describedby="emailHelp"
                                                        placeholder="Nome">
                                             </div>
@@ -397,17 +450,17 @@
                                                 <div class="row">
                                                     <div class="col-4 align-items-center">
                                                         <h4 class="ms-2 me-2">Quantidade/Queijo</h4>
-                                                        <input required type="number" style="border-color: #273C4E; width: 230px;"
+                                                        <input name="quantidadeQueijo"  type="number" style="border-color: #273C4E; width: 230px;"
                                                                class="form-control rounded-pill" aria-describedby="emailHelp"
                                                                placeholder="Kg">
                                                         <h4 class="ms-2 me-2 mt-2">Quantidade/Leite</h4>
-                                                        <input required type="number" style="border-color: #273C4E; width: 230px;"
+                                                        <input name="quantidadeleite"  type="number" style="border-color: #273C4E; width: 230px;"
                                                                class="form-control rounded-pill" aria-describedby="emailHelp"
                                                                placeholder="Litros">
                                                     </div>
                                                     <div class="col align-items-center">
                                                         <h4>Observações</h4>
-                                                        <textarea required type="Text" style="border-color: #273C4E; height:77%;"
+                                                        <textarea name="observacao"  type="Text" style="border-color: #273C4E; height:77%;"
                                                                   class="form-control w-100 " aria-describedby="emailHelp"
                                                                   placeholder=""></textarea>
                                                     </div>
@@ -415,15 +468,15 @@
                                             </div>
 
                                             <div class="d-flex justify-content-end w-auto">
-                                                <button  th:text="${amostra != null}? 'Atualizar' : 'Cadastrar'"
-                                                        class="btn btn-success rounded-pill fs-4 px-5 shadow" style="width: 200px;" data-bs-dismiss="modal" >Salvar</button>
+                                                <button  th:text="${amostra != null}? 'Cadastrar' : 'Cadastrar'"
+                                                        type="submit" class="btn btn-success rounded-pill fs-4 px-5 shadow" style="width: 200px;" >Salvar</button>
                                             </div>
                                     </form>
 
                                     <form th:if="${usuario != null}" th:action="@{/usuarios/delete/{id}(id=${usuario.idUsuario})}"
                                           th:method="delete">
                                         <div class="d-flex justify-content-end w-auto" >
-                                            <button type="submit" th:text="${propriedade != null}? 'Atualizar' : 'Cadastrar'"
+                                            <button type="submit" th:text="${amostra != null}? 'Cadastrar' : 'Cadastrar'"
                                                     class="btn btn-danger rounded-pill fs-4 px-5 mt-2 shadow" style="width: 200px;" data-bs-dismiss="modal" >Sair</button>
                                         </div>
                                     </form>
@@ -431,67 +484,6 @@
 
                             </div>
                         </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-
-        <!-- Modal Cursos -->
-        <div class="modal fade" id="cursoModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <h1>Modal de tecnologias</h1>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-success">Adicionar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal tecnologias -->
-        <div class="modal fade" id="tecModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <h1>Modal de curso</h1>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-success">Adicionar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal fornecedores da propriedade -->
-        <div class="modal fade" id="fornecedoresModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <h1>Modal de Fornecedores</h1>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-success">Adicionar</button>
                     </div>
                 </div>
             </div>
@@ -518,6 +510,7 @@
         <!-- Include DataTables JS -->
         <script type="text/javascript" charset="utf8"
                 src="//cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/plug-ins/1.11.5/sorting/date-eu.js"></script>
         <script>
             $(document).ready(function () {
                 $('#usuarioTable').DataTable();
@@ -540,7 +533,13 @@
             new DataTable('#myTable', {
                 paging: false,
                 scrollCollapse: true,
-                scrollY: '245px'
+              	lengthChange: false,
+  				info: false,
+  				"columnDefs": [
+                    { "type": "date-eu", "targets": 0 },
+
+                ]
+
 
             });
         </script>
@@ -548,10 +547,48 @@
 
         <!-- Script para tabela de leites -->
         <script>
+            // Estrutura de dados para armazenar a produção de leite por ano e mês
+            var dadosProducao = {};
+
+            // Função para inicializar os dados com a estrutura vazia para cada ano e mês
+            function inicializarDados() {
+                // Obter todas as linhas da tabela de amostras
+                var linhas = document.querySelectorAll("#myTable tbody tr");
+
+                // Loop pelas linhas da tabela
+                linhas.forEach(function(linha) {
+                    var colunas = linha.getElementsByTagName("td");
+                    var data = colunas[1].textContent.trim(); // Data no formato 'dd/MM/yyyy'
+                    var quantidadeLeite = parseInt(colunas[2].textContent.trim(), 10); // Quantidade de leite como número inteiro
+
+                    // Extrair o ano e mês da data
+                    var partesData = data.split("/");
+                    var ano = partesData[2];
+                    var mes = parseInt(partesData[1], 10); // Converter o mês para número inteiro
+
+                    // Verificar se já existe entrada para o ano, senão criar
+                    if (!dadosProducao[ano]) {
+                        dadosProducao[ano] = {};
+                    }
+
+                    // Verificar se já existe entrada para o mês, senão criar
+                    if (!dadosProducao[ano][mes]) {
+                        dadosProducao[ano][mes] = 0;
+                    }
+
+                    // Adicionar a quantidade de leite ao mês correspondente
+                    dadosProducao[ano][mes] += quantidadeLeite;
+                });
+            }
+
+            // Chamada inicial para inicializar os dados com a tabela existente
+            inicializarDados();
+
+            // Configuração inicial do gráfico
             var options = {
                 series: [{
                     name: 'Leite',
-                    data: [10, 5, 3, 2, 3, 5, 10, 12, 15, 23, 50, 100]
+                    data: [] // Os dados serão definidos dinamicamente ao filtrar por ano
                 }],
                 chart: {
                     height: 350,
@@ -567,7 +604,7 @@
                 },
                 dataLabels: {
                     enabled: true,
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return val + "L";
                     },
                     offsetY: -20,
@@ -576,7 +613,6 @@
                         colors: ["#304758"]
                     }
                 },
-
                 xaxis: {
                     categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
                     position: 'top',
@@ -611,11 +647,10 @@
                     },
                     labels: {
                         show: false,
-                        formatter: function (val) {
+                        formatter: function(val) {
                             return val + "%";
                         }
                     }
-
                 },
                 title: {
                     text: 'Produção mensal de leite',
@@ -630,6 +665,77 @@
 
             var chart = new ApexCharts(document.querySelector("#chart"), options);
             chart.render();
+
+
+
+            var anosDisponiveis = Object.keys(dadosProducao);
+            if (anosDisponiveis.length > 0) {
+                // Encontrar o ano mais recente
+                var anoMaisRecente = anosDisponiveis.reduce(function(a, b) {
+                    return Math.max(a, b);
+                });
+                // Filtrar pelo ano mais recente
+                filtrarPorAno(anoMaisRecente);
+            }
+
+            // Função para filtrar e atualizar o gráfico com base no ano selecionado
+            function filtrarPorAno(anoSelecionado) {
+                var dataLeite = [];
+
+                // Verificar se existem dados para o ano selecionado
+                if (dadosProducao[anoSelecionado]) {
+                    // Loop pelos meses de 1 a 12
+                    for (var i = 1; i <= 12; i++) {
+                        // Se houver dados para o mês, adicionar à lista de dados do gráfico
+                        if (dadosProducao[anoSelecionado][i]) {
+                            dataLeite.push(dadosProducao[anoSelecionado][i]);
+                        } else {
+                            // Caso não haja dados para o mês, adicionar 0 para manter a ordem
+                            dataLeite.push(0);
+                        }
+                    }
+                } else {
+                    // Se não houver dados para o ano selecionado, preencher com zeros
+                    dataLeite = Array(12).fill(0);
+                }
+
+                // Atualiza os dados do gráfico com os dados de leite do ano selecionado
+                chart.updateSeries([{
+                    data: dataLeite
+                }]);
+
+
+            }
+
+            // Função para retornar todos os anos disponíveis nos dados e atualizar o <select>
+                function atualizarSelectAnos() {
+                var selectAno = document.getElementById('selectYear');
+                var anosDisponiveis = Object.keys(dadosProducao);
+
+                // Limpar opções existentes
+                selectAno.innerHTML = '';
+
+                // Ordenar anos disponíveis em ordem decrescente
+                anosDisponiveis.sort(function(a, b) {
+                    return b - a; // Ordena de forma decrescente
+                });
+
+                // Adicionar opções para cada ano disponível
+                anosDisponiveis.forEach(function(ano) {
+                    var option = document.createElement('option');
+                    option.value = ano;
+                    option.textContent = ano;
+                    selectAno.appendChild(option);
+                });
+
+                // Filtrar inicialmente pelo ano mais recente
+                if (anosDisponiveis.length > 0) {
+                    filtrarPorAno(anosDisponiveis[0]); // Passa o ano mais recente para a função filtrarPorAno()
+                }
+            }
+
+            // Chamar a função para inicializar o <select> com os anos disponíveis
+            atualizarSelectAnos();
         </script>
 
 
