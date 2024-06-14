@@ -1,33 +1,22 @@
 package com.queijos_finos.main.controller;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.queijos_finos.main.model.*;
+import com.queijos_finos.main.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import com.queijos_finos.main.model.Contrato;
-import com.queijos_finos.main.model.Curso;
-import com.queijos_finos.main.model.Fornecedor;
-import com.queijos_finos.main.model.Propriedade;
-import com.queijos_finos.main.model.Tecnologias;
-import com.queijos_finos.main.repository.ContratoRepository;
-import com.queijos_finos.main.repository.CursosRepository;
-import com.queijos_finos.main.repository.FornecedorRepository;
-import com.queijos_finos.main.repository.PropriedadeRepository;
-import com.queijos_finos.main.repository.TecnologiaRepository;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class PropriedadeController {
@@ -40,6 +29,58 @@ public class PropriedadeController {
 	private TecnologiaRepository tecnologiaRepo;
 	@Autowired
 	private FornecedorRepository fornecedorRepo;
+	@Autowired
+	private AmostraRepository amostraRepo;
+
+
+
+	@GetMapping("/propriedade")
+	public String showPropriedade(Model model) {
+		List<Propriedade> propriedade;
+		Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
+		propriedade = propriedadeRepo.findAll(pageable).getContent();
+		model.addAttribute("propriedade", propriedade);
+		return "propriedade";
+	}
+
+	@GetMapping("/propriedade/visualizar")
+	public String detailsPropriedade(@RequestParam(required = false) Long idPropriedade, Model model) {
+		Optional<Propriedade> propriedadeOptional = propriedadeRepo.findById(idPropriedade);
+		Propriedade propriedade = propriedadeOptional.orElse(null);
+
+		model.addAttribute("propriedade", propriedade);
+		model.addAttribute("amostra", new Amostra());
+		return "visualizarPropriedade";
+	}
+
+	@PostMapping("/amostras")
+	public String createAmostra(@RequestParam Long propriedadeId, @RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date data,
+								@RequestParam Double quantidadeleite, @RequestParam Double quantidadeQueijo,
+								@RequestParam String observacao) {
+
+		Propriedade propriedade = propriedadeRepo.findById(propriedadeId)
+				.orElseThrow(() -> new IllegalArgumentException("Propriedade não encontrada"));
+
+		Amostra amostra = new Amostra();
+		amostra.setData(data);
+		amostra.setQuantidadeleite(quantidadeleite);
+		amostra.setQuantidadeQueijo(quantidadeQueijo);
+		amostra.setObservacao(observacao);
+		amostra.setPropriedade(propriedade);
+
+		amostraRepo.save(amostra);
+
+		return "redirect:/propriedade/visualizar?idPropriedade=" + propriedadeId;
+	}
+
+	@DeleteMapping("/amostra/delete/{id}")
+	public void deleteAmostra(@PathVariable("id") Long id) {
+		amostraRepo.deleteById(id); // Remove a amostra pelo ID fornecido
+	}
+
+
+
+
 	
 	@GetMapping("/propriedade/cadastrar")
 	public String createContratoView(@RequestParam(required = false) Long idPropriedade,
@@ -122,12 +163,13 @@ public class PropriedadeController {
 		model.addAttribute("mensagem", "Propriedade salva com sucesso");
 		return "redirect:/contratos";
 	}
-	
-	
-	@PostMapping("/propriedade/delete/{id}")
-	public String deleteContrato(@PathVariable("id") Long id) {
-		
-		propriedadeRepo.deleteById(id);
-		return "propriedadeCadastrar";
-	}
+
+
+
+
+
+
+
+
 }
+

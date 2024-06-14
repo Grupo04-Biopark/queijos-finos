@@ -13,7 +13,7 @@ import java.util.List;
 public interface UsuarioRepository extends JpaRepository<Usuarios, Long>{
 	@Query("select u from Usuarios u where u.email=:email")
 	Usuarios findByEmail(String email);
-	Page<Usuarios> findAll(Pageable pageable);
 
+	Page<Usuarios> findAll(Pageable pageable);
 	List<Usuarios> findByNomeContainingIgnoreCase(String query);
 }

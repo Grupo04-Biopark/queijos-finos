@@ -347,13 +347,17 @@
             </header>
         </div>
         <div class="conteudo-index p-3">
-            <div class="w-100 flex-column align-items-center d-flex justify-content-center" style="height: 100vh;">
-                <span th:text="${mensagem}"></span>
+            <div class="border border-black  w-100 h-100" style="border-radius: 55px;">
+                <div class="border border-black w-100 p-4 rounded-pill shadow-lg ">
+                    <h1 th:text="${usuario != null}? 'Editar Usuário' : 'Cadastrar Usuário' "></h1>
+                </div>
+            <div class="w-100 flex-column align-items-center d-flex justify-content-center p-5" style="height: 70vh;">
                 <div class="w-50">
                 </div>
-                <h1 th:text="${usuario != null}? 'Editar' : 'Cadastrar' "></h1>
+
+
                 <form class="w-100" th:action="@{/usuarios}" method="post">
-            <div class="mb-3">
+            <div class="mb-3 p-2">
                 <input th:value="${usuario != null}? ${usuario.getIdUsuario()} : -1" name="id" type="hidden" placeholder="id">            </div>
                 <div class="mb-3">
             <div class="mb-3">
@@ -365,15 +369,20 @@
             <div class="mb-3">
                 <input th:value="${usuario != null}? ${{usuario.getSenha()}} : ''" name="senha" required type="text" style="border-color: #273C4E;" class="form-control rounded-pill shadow"  placeholder="Senha">
             </div>
+<<<<<<< HEAD
+            <div class="d-flex justify-content-end w-auto">
+=======
                     <div class="d-flex justify-content-between align-items-center">
                         <button th:if="${usuario != null}" th:onclick="'excluirPergunta(\'' + ${usuario.getIdUsuario()} + '\');'" class="btn btn-danger rounded-pill fs-4 px-5 shadow " style="width: 200px; height: 55px">
                             Excluir
                         </button>
 
+
                         <button type="submit" th:text="${usuario != null}? 'Atualizar' : 'Cadastrar'" class="btn btn-success rounded-pill fs-4 px-5 shadow" style="width: 200px; height: 55px">Cadastrar</button>
                     </div>
                 </form>
             </div>
+
         </div>
     </div>
 </div>
