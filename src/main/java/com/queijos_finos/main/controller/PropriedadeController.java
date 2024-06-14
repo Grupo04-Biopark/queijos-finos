@@ -74,6 +74,7 @@ public class PropriedadeController {
 	}
 
 	@DeleteMapping("/amostra/delete/{id}")
+	@ResponseBody
 	public void deleteAmostra(@PathVariable("id") Long id) {
 		amostraRepo.deleteById(id); // Remove a amostra pelo ID fornecido
 	}
