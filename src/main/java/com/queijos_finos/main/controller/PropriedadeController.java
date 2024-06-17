@@ -37,7 +37,7 @@ public class PropriedadeController {
 	@GetMapping("/propriedade")
 	public String showPropriedade(Model model) {
 		List<Propriedade> propriedade;
-		Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
+		Pageable pageable = PageRequest.of(0, 100);
 		propriedade = propriedadeRepo.findAll(pageable).getContent();
 		model.addAttribute("propriedade", propriedade);
 		return "propriedade";
@@ -106,17 +106,6 @@ public class PropriedadeController {
 		return "propriedadeCadastrar";
 	}
 	
-//	@GetMapping("/contratos")
-//    public String showContratos(
-//                                   Model model){
-//        Pageable pageable = PageRequest.of(30, 25);
-//        
-//        Page<Contrato> contratos = contratoRepo.findAll(pageable);
-//
-//        model.addAttribute("contratos", contratos);
-//		
-//		return "contratos"; 
-//    }
 	
 	@PostMapping("/propriedade")
 	public String createContrato(@RequestBody Propriedade propriedadeReq,

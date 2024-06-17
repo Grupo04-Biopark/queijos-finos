@@ -94,7 +94,7 @@ public class UsuarioController {
 	}
 	
 	
-	@PostMapping("/login")
+	@PostMapping("/paginaInicial")
 	public String login(@RequestParam("email") String email,
             					@RequestParam("senha") String senha,
             					Model model) {
@@ -118,5 +118,20 @@ public class UsuarioController {
 			model.addAttribute("mensagem", "Credenciais invalidas");
 			return "login";
 		}
+	}
+	
+	@GetMapping("/paginaInicial")
+	public String paginaIncial(Model model) {
+		
+		
+			long type1Count = propRepo.countBystatus(0);
+			long type2Count = propRepo.countBystatus(1);
+			long type3Count = propRepo.countBystatus(2);
+
+			model.addAttribute("type1Count", type1Count);
+			model.addAttribute("type2Count", type2Count);
+			model.addAttribute("type3Count", type3Count);
+			return "paginaInicial";
+		
 	}
 }
