@@ -4,6 +4,7 @@ import com.queijos_finos.main.repository.PropriedadeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,6 @@ import com.queijos_finos.main.repository.UsuarioRepository;
 
 import java.util.List;
 import java.util.Optional;
-
 
 @Controller
 public class UsuarioController {
@@ -40,30 +40,46 @@ public class UsuarioController {
 	public String createUsuario(@RequestParam("id") Long id,
 								@RequestParam("nome") String nome,
 								@RequestParam("email") String email,
-								@RequestParam("senha") String senha,
+								@RequestParam(name = "senha", required = false) String senha,
 								Model model)  {
 
-		if (id != -1) {
-			usuarioRepo.findById(id)
-					.map(usuarios -> {
-						usuarios.setNome(nome);
-						usuarios.setEmail(email);
-						usuarios.setSenha(senha);
-						return usuarioRepo.save(usuarios);
-					})
-					.orElseThrow(() -> new RuntimeException("Usuário não encontrado com o ID: " + id));
-		} else {
-			Usuarios usuarios = new Usuarios();
-			usuarios.setNome(nome);
-			usuarios.setEmail(email);
-			usuarios.setSenha(senha);
-			usuarioRepo.save(usuarios);
-		}
+		BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
+        Usuarios usuario = new Usuarios();
+
+        if (id != -1) {
+            usuarioRepo.findById(id)
+                .map(usuarios -> {
+                    usuarios.setNome(nome);
+                    usuarios.setEmail(email);
+                    return usuarioRepo.save(usuarios);
+                })
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o ID: " + id));
+        } else {
+            usuario.setNome(nome);
+            usuario.setEmail(email);
+            usuario.setSenha(hashGenerator.encode(senha));
+            usuarioRepo.save(usuario);
+        }
 
 		model.addAttribute("mensagem", "Usuário salvo com sucesso");
 		return "redirect:/usuarios";
 	}
-
+	
+	@PostMapping("/usuarios/alterarSenha")
+	public String alterarSenhaUsuario(@RequestParam("id") Long id,
+										@RequestParam("novaSenha") String novaSenha,
+										Model model) {
+        BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
+        usuarioRepo.findById(id)
+                .map(usuarios -> {
+                    usuarios.setSenha(hashGenerator.encode(novaSenha));
+                    return usuarioRepo.save(usuarios);
+                })
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o ID: " + id));
+        model.addAttribute("mensagem", "Usuário salvo com sucesso");
+		return "redirect:/usuarios";
+    }
+	
 	@PostMapping("/usuarios/delete/{id}")
 	public String deleteUsuario(@PathVariable("id") Long id,
 								Model model) {
@@ -101,8 +117,9 @@ public class UsuarioController {
 		
 		Usuarios usu = usuarioRepo.findByEmail(email);
 		
+		BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
 		
-		if(usu.getSenha().equals(senha)) {
+		if(hashGenerator.matches(senha, usu.getSenha())) {
 			model.addAttribute("usu", usu);
 			long type1Count = propRepo.countBystatus(0);
 			long type2Count = propRepo.countBystatus(1);
@@ -134,4 +151,5 @@ public class UsuarioController {
 			return "paginaInicial";
 		
 	}
+	
 }

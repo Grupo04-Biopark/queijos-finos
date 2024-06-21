@@ -303,7 +303,6 @@
                             <th scope="col">Asc</th>
                             <th scope="col">Nome</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Senha</th>
                             <th scope="col"></th>
                         </tr>
                         </thead>
@@ -316,7 +315,6 @@
 
                             <td th:text="${usuario.getNome()}"></td>
                             <td th:text="${usuario.getEmail()}"></td>
-                            <td th:text="${usuario.getSenha()}"></td>
                             <td class="d-flex flex-row-reverse"><a th:href="@{/usuarios/cadastrar?idUsuarios={id}(id=${usuario.getIdUsuario()})}"><button class="btn"><img src="ferramenta-lapis.png" alt=""></button></a></td>
                         </tr>
                         </tbody>

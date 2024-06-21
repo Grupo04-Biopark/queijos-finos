@@ -374,7 +374,7 @@
                                                                 stroke-linejoin="round" />
                                                     </svg>
                                                     <p class="text-center mb-0 ml-2">Status</p>
-                                                    <p class="font-weight-bold text-center mb-0 ml-2 " th:style="'color:' + (${prop.status == 0} ? 'rgb(233, 18, 10);font-weight: bold' : (${prop.status == 1} ? 'rgb(241, 245, 0);font-weight: bold' : 'rgb(112, 248, 112);font-weight: bold'))" th:text="${prop.status == 2} ? 'Produzindo' : (${prop.status == 1} ? 'Contemplação' : 'Desistente')"></p>
+                                                    <p class="font-weight-bold text-center mb-0 ml-2 " th:style="'color:' + (${prop.status == 0} ? 'rgb(184,43,43);font-weight: bold' : (${prop.status == 1} ? 'rgb(226,195,29);font-weight: bold' : 'rgb(80,160,30);font-weight: bold'))" th:text="${prop.status == 2} ? 'Produzindo' : (${prop.status == 1} ? 'Contemplação' : 'Desistente')"></p>
                                                     <p th:text ='${prop.status}'></p>
                                                 </div>
                                                 <div class="d-flex justify-content-end">
