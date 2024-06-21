@@ -3,11 +3,7 @@ package com.queijos_finos.main.model;
 import java.util.List;
 import java.util.Objects;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 
 @Entity
 public class Curso {
@@ -19,7 +15,7 @@ public class Curso {
 	private String professor;
 	private String duracao;
 	
-	@ManyToMany(mappedBy = "cursos")
+	@ManyToMany(cascade= CascadeType.REMOVE, mappedBy = "cursos")
 	private List<Propriedade> propriedades;
 	
 	

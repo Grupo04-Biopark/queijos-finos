@@ -378,14 +378,15 @@
                     <!-- Botão de excluir -->
                     <div class="w-100 d-flex justify-content-end" style="margin-top: 5px;">
                         <button th:if="${curso != null}"
-                                th:onclick="'excluirCurso(' + ${curso.getId()} + ');'"
+                                th:data-id="${curso.id}"
                                 class="btn btn-danger rounded-pill fs-4 px-5 shadow"
-                                style="width: 200px;">
+                                style="width: 200px;"
+                                onclick="excluirCurso(this.dataset.id);">
                             Excluir
                         </button>
                     </div>
 
-                    <form id="excluir-curso-form" th:action="@{/cursos/delete/__id__}" method="post" style="display:none;">
+                    <form id="excluir-curso-form" method="post" style="display:none;">
                         <input type="hidden" name="_method" value="delete"/>
                     </form>
 
@@ -405,8 +406,8 @@
 
                 Swal.fire({
                     title: "Tem certeza que deseja excluir?",
-                    text: "Isso não será reversível!",
-                    icon: "warning",
+                    text: "Isso nao será reversivel!",
+                    type: "warning",
                     showCancelButton: true,
                     confirmButtonColor: '#DD6B55',
                     confirmButtonText: 'Sim, tenho certeza!',
@@ -416,12 +417,26 @@
                 }).then(function(result) {
                     if (result.isConfirmed) {
                         // Se o usuário confirmou, execute a exclusão do curso
-                        const form = document.getElementById('excluir-curso-form');
-                        form.action = form.action.replace('__id__', cursoId);
-                        form.submit();
+                        $.ajax({
+                            url: '/cursos/delete/' + cursoId,
+                            type: 'POST',
+                            data: {_method: 'POST'},
+                            success: function(response) {
+                                window.location.href = '/cursos';
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Ocorreu um erro ao excluir a pergunta.'
+                                });
+                            }
+                        });
                     }
                 });
+
             }
+
         </script>
 
 </body>

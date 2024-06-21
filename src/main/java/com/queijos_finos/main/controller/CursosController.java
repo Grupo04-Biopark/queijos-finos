@@ -70,9 +70,10 @@ public class CursosController {
     }
 
     @PostMapping("/delete/{id}")
-    public String deleteCursos(@PathVariable Long id, Model model) {
+    public String deleteCurso(@PathVariable Long id, Model model) {
         cursosRepository.deleteById(id);
         model.addAttribute("mensagem", "Curso excluído com sucesso");
         return "redirect:/cursos";
     }
+
 }
