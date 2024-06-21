@@ -84,7 +84,7 @@ public class PropriedadeController {
 
 	
 	@GetMapping("/propriedade/cadastrar")
-	public String createContratoView(@RequestParam(required = false) Long idPropriedade,
+	public String createPropriedadeView(@RequestParam(required = false) Long idPropriedade,
 									 Model model) {
 		
 		if(idPropriedade != null) {
@@ -108,7 +108,7 @@ public class PropriedadeController {
 	
 	
 	@PostMapping("/propriedade")
-	public String createContrato(@RequestBody Propriedade propriedadeReq,
+	public String createPropriedade(@RequestBody Propriedade propriedadeReq,
 									Model model) throws ParseException {
 		
 		for (Tecnologias tecnologia : propriedadeReq.getTecnologias()) {
@@ -154,7 +154,15 @@ public class PropriedadeController {
 		return "redirect:/contratos";
 	}
 
-
+	@PostMapping("/propriedade/delete/{id}")
+	public String createContrato(@PathVariable("id") Long idPropriedade,
+									Model model){
+		
+		propriedadeRepo.deleteById(idPropriedade);
+	
+		model.addAttribute("mensagem", "Propriedade deletada com sucesso");
+		return "redirect:/contratos";
+	}
 
 
 
