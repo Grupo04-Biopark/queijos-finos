@@ -322,10 +322,10 @@
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center">
-                        <form th:action="@{/cursos/delete/{id}(id=${curso.getId()})}" method="post" class="mb-2">
-                            <input type="hidden" name="_method" value="delete"/>
-                            <button type="submit" class="btn btn-danger rounded-pill fs-4 px-5 shadow btn-custom">Excluir</button>
-                        </form>
+                        
+                        
+                        <button type="button" th:onclick="'excluirCurso(\'' + ${curso.getId()} + '\');'" class="btn btn-danger rounded-pill fs-4 px-5 shadow btn-custom">Excluir</button>
+                        
 
                         <form th:action="@{/cursos/update/{id}(id=${curso.getId()})}" method="post">
                             <button type="submit" class="btn btn-success rounded-pill fs-4 px-5 shadow btn-custom ">Atualizar</button>
@@ -336,7 +336,47 @@
             </div>
         </div>
         <!-- importando script -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		
+		<script>
+		            function excluirCurso(cursoId) {
+		                console.log(cursoId);
+		
+		                Swal.fire({
+		                    title: "Tem certeza que deseja excluir?",
+		                    text: "Isso nao será reversivel!",
+		                    type: "warning",
+		                    showCancelButton: true,
+		                    confirmButtonColor: '#DD6B55',
+		                    confirmButtonText: 'Sim, tenho certeza!',
+		                    cancelButtonText: "Cancelar",
+		                    closeOnConfirm: false,
+		                    closeOnCancel: false
+		                }).then(function(result) {
+		                    if (result.isConfirmed) {
+		                        // Se o usuário confirmou, execute a exclusão do curso
+		                        $.ajax({
+		                            url: '/cursos/delete/' + cursoId,
+		                            type: 'POST',
+		                            data: {_method: 'POST'},
+		                            success: function(response) {
+		                                window.location.href = '/cursos';
+		                            },
+		                            error: function(xhr, status, error) {
+		                                Swal.fire({
+		                                    icon: 'error',
+		                                    title: 'Oops...',
+		                                    text: 'Ocorreu um erro ao excluir a pergunta.'
+		                                });
+		                            }
+		                        });
+		                    }
+		                });
+		
+		            }
+		
+		        </script>
 </body>
 </html>
