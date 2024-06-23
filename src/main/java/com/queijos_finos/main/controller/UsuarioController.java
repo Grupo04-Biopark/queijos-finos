@@ -19,41 +19,41 @@ import java.util.Optional;
 
 @Controller
 public class UsuarioController {
-	
-	@Autowired
-	private UsuarioRepository usuarioRepo;
-	@Autowired
-	private PropriedadeRepository propRepo;
+
+    @Autowired
+    private UsuarioRepository usuarioRepo;
+    @Autowired
+    private PropriedadeRepository propRepo;
 
 
-	@GetMapping("/usuarios")
-	public String showUsuarios(@RequestParam(name = "query", required = false) String query, Model model) {
-		List<Usuarios> usuarios;
-		Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
-		usuarios = usuarioRepo.findAll(pageable).getContent();
-		model.addAttribute("usuarios", usuarios);
-		return "usuarios"; // Retorna o nome da página Thymeleaf
-	}
+    @GetMapping("/usuarios")
+    public String showUsuarios(@RequestParam(name = "query", required = false) String query, Model model) {
+        List<Usuarios> usuarios;
+        Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
+        usuarios = usuarioRepo.findAll(pageable).getContent();
+        model.addAttribute("usuarios", usuarios);
+        return "usuarios";
+    }
 
 
-	@PostMapping("/usuarios")
-	public String createUsuario(@RequestParam("id") Long id,
-								@RequestParam("nome") String nome,
-								@RequestParam("email") String email,
-								@RequestParam(name = "senha", required = false) String senha,
-								Model model)  {
+    @PostMapping("/usuarios")
+    public String createUsuario(@RequestParam("id") Long id,
+                                @RequestParam("nome") String nome,
+                                @RequestParam("email") String email,
+                                @RequestParam(name = "senha", required = false) String senha,
+                                Model model) {
 
-		BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
+        BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
         Usuarios usuario = new Usuarios();
 
         if (id != -1) {
             usuarioRepo.findById(id)
-                .map(usuarios -> {
-                    usuarios.setNome(nome);
-                    usuarios.setEmail(email);
-                    return usuarioRepo.save(usuarios);
-                })
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o ID: " + id));
+                    .map(usuarios -> {
+                        usuarios.setNome(nome);
+                        usuarios.setEmail(email);
+                        return usuarioRepo.save(usuarios);
+                    })
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o ID: " + id));
         } else {
             usuario.setNome(nome);
             usuario.setEmail(email);
@@ -61,14 +61,14 @@ public class UsuarioController {
             usuarioRepo.save(usuario);
         }
 
-		model.addAttribute("mensagem", "Usuário salvo com sucesso");
-		return "redirect:/usuarios";
-	}
-	
-	@PostMapping("/usuarios/alterarSenha")
-	public String alterarSenhaUsuario(@RequestParam("id") Long id,
-										@RequestParam("novaSenha") String novaSenha,
-										Model model) {
+        model.addAttribute("mensagem", "Usuário salvo com sucesso");
+        return "redirect:/usuarios";
+    }
+
+    @PostMapping("/usuarios/alterarSenha")
+    public String alterarSenhaUsuario(@RequestParam("id") Long id,
+                                      @RequestParam("novaSenha") String novaSenha,
+                                      Model model) {
         BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
         usuarioRepo.findById(id)
                 .map(usuarios -> {
@@ -77,79 +77,77 @@ public class UsuarioController {
                 })
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o ID: " + id));
         model.addAttribute("mensagem", "Usuário salvo com sucesso");
-		return "redirect:/usuarios";
+        return "redirect:/usuarios";
     }
-	
-	@PostMapping("/usuarios/delete/{id}")
-	public String deleteUsuario(@PathVariable("id") Long id,
-								Model model) {
 
-		usuarioRepo.deleteById(id);
-		return "redirect:/usuarios";
-	}
+    @PostMapping("/usuarios/delete/{id}")
+    public String deleteUsuario(@PathVariable("id") Long id,
+                                Model model) {
+
+        usuarioRepo.deleteById(id);
+        return "redirect:/usuarios";
+    }
 
 
-
-	@GetMapping("/usuarios/cadastrar")
-	public String createUsuarioView(@RequestParam(required = false) Long idUsuarios, Model model) {
-		if (idUsuarios != null) {
-			Optional<Usuarios> usuarioOptional = usuarioRepo.findById(idUsuarios);
+    @GetMapping("/usuarios/cadastrar")
+    public String createUsuarioView(@RequestParam(required = false) Long idUsuarios, Model model) {
+        if (idUsuarios != null) {
+            Optional<Usuarios> usuarioOptional = usuarioRepo.findById(idUsuarios);
             usuarioOptional.ifPresent(usuarios -> model.addAttribute("usuario", usuarios));
-		}
+        }
 
-		return "usuariosCadastrar";
-	}
+        return "usuariosCadastrar";
+    }
 
 
+    @GetMapping("/")
+    public ModelAndView login() {
+        ModelAndView modelview = new ModelAndView();
+        modelview.setViewName("login");
+        return modelview;
+    }
 
-	@GetMapping("/")
-	public ModelAndView login() {
-		ModelAndView modelview = new ModelAndView();
-		modelview.setViewName("login");
-		return modelview;
-	}
-	
-	
-	@PostMapping("/paginaInicial")
-	public String login(@RequestParam("email") String email,
-            					@RequestParam("senha") String senha,
-            					Model model) {
-		
-		Usuarios usu = usuarioRepo.findByEmail(email);
-		
-		BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
-		
-		if(hashGenerator.matches(senha, usu.getSenha())) {
-			model.addAttribute("usu", usu);
-			long type1Count = propRepo.countBystatus(0);
-			long type2Count = propRepo.countBystatus(1);
-			long type3Count = propRepo.countBystatus(2);
 
-			model.addAttribute("type1Count", type1Count);
-			model.addAttribute("type2Count", type2Count);
-			model.addAttribute("type3Count", type3Count);
-			System.out.println(usu.getNome());
-			return "paginaInicial";
-		}else {
-			
-			model.addAttribute("mensagem", "Credenciais invalidas");
-			return "login";
-		}
-	}
-	
-	@GetMapping("/paginaInicial")
-	public String paginaIncial(Model model) {
-		
-		
-			long type1Count = propRepo.countBystatus(0);
-			long type2Count = propRepo.countBystatus(1);
-			long type3Count = propRepo.countBystatus(2);
+    @PostMapping("/paginaInicial")
+    public String login(@RequestParam("email") String email,
+                        @RequestParam("senha") String senha,
+                        Model model) {
 
-			model.addAttribute("type1Count", type1Count);
-			model.addAttribute("type2Count", type2Count);
-			model.addAttribute("type3Count", type3Count);
-			return "paginaInicial";
-		
-	}
-	
+        Usuarios usu = usuarioRepo.findByEmail(email);
+
+        BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
+
+        if (hashGenerator.matches(senha, usu.getSenha())) {
+            model.addAttribute("usu", usu);
+            long type1Count = propRepo.countBystatus(0);
+            long type2Count = propRepo.countBystatus(1);
+            long type3Count = propRepo.countBystatus(2);
+
+            model.addAttribute("type1Count", type1Count);
+            model.addAttribute("type2Count", type2Count);
+            model.addAttribute("type3Count", type3Count);
+            System.out.println(usu.getNome());
+            return "paginaInicial";
+        } else {
+
+            model.addAttribute("mensagem", "Credenciais invalidas");
+            return "login";
+        }
+    }
+
+    @GetMapping("/paginaInicial")
+    public String paginaIncial(Model model) {
+
+
+        long type1Count = propRepo.countBystatus(0);
+        long type2Count = propRepo.countBystatus(1);
+        long type3Count = propRepo.countBystatus(2);
+
+        model.addAttribute("type1Count", type1Count);
+        model.addAttribute("type2Count", type2Count);
+        model.addAttribute("type3Count", type3Count);
+        return "paginaInicial";
+
+    }
+
 }

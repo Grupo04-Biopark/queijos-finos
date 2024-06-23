@@ -52,15 +52,12 @@ class QueijosFinosApplicationTests {
     
     @Test
     void alterarSenhaUsuarioTest() {
-        //cenario
-        long id = 202; // Make sure this user ID exists in the database
+        long id = 202;
         String novaSenha = "admin";
         BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
 
-        //acao
         Usuarios usuario = usuarioService.alterarSenhaUsuario(id, novaSenha);
 
-        //validacao
         assertTrue(hashGenerator.matches(novaSenha, usuario.getSenha()));
     }
 }

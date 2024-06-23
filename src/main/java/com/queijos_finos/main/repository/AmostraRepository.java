@@ -1,4 +1,5 @@
 package com.queijos_finos.main.repository;
+
 import com.queijos_finos.main.model.Amostra;
 import com.queijos_finos.main.model.Propriedade;
 import org.springframework.data.jpa.repository.JpaRepository;

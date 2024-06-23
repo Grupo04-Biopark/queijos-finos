@@ -12,15 +12,13 @@ import com.queijos_finos.main.model.Propriedade;
 import com.queijos_finos.main.model.Usuarios;
 
 
+public interface PropriedadeRepository extends JpaRepository<Propriedade, Long> {
+    Page<Propriedade> findAll(Pageable pageable);
+
+    long countBystatus(int status);
 
 
-public interface PropriedadeRepository extends JpaRepository<Propriedade, Long>{
-	Page<Propriedade> findAll(Pageable pageable);
-
-	long countBystatus(int status);
-
-
-	@Query("SELECT p FROM Propriedade p WHERE p.id NOT IN (SELECT DISTINCT c.propriedade.id FROM Contrato c)")
-	List<Propriedade> findWithoutContrato();
+    @Query("SELECT p FROM Propriedade p WHERE p.id NOT IN (SELECT DISTINCT c.propriedade.id FROM Contrato c)")
+    List<Propriedade> findWithoutContrato();
 
 }

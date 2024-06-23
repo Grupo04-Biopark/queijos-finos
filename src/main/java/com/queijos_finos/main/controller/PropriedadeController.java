@@ -21,152 +21,143 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class PropriedadeController {
 
-	@Autowired
-	private PropriedadeRepository propriedadeRepo;
-	@Autowired
-	private CursosRepository cursoRepo;
-	@Autowired
-	private TecnologiaRepository tecnologiaRepo;
-	@Autowired
-	private FornecedorRepository fornecedorRepo;
-	@Autowired
-	private AmostraRepository amostraRepo;
+    @Autowired
+    private PropriedadeRepository propriedadeRepo;
+    @Autowired
+    private CursosRepository cursoRepo;
+    @Autowired
+    private TecnologiaRepository tecnologiaRepo;
+    @Autowired
+    private FornecedorRepository fornecedorRepo;
+    @Autowired
+    private AmostraRepository amostraRepo;
 
 
+    @GetMapping("/propriedade")
+    public String showPropriedade(Model model) {
+        List<Propriedade> propriedade;
+        Pageable pageable = PageRequest.of(0, 100);
+        propriedade = propriedadeRepo.findAll(pageable).getContent();
+        model.addAttribute("propriedade", propriedade);
+        return "propriedade";
+    }
 
-	@GetMapping("/propriedade")
-	public String showPropriedade(Model model) {
-		List<Propriedade> propriedade;
-		Pageable pageable = PageRequest.of(0, 100);
-		propriedade = propriedadeRepo.findAll(pageable).getContent();
-		model.addAttribute("propriedade", propriedade);
-		return "propriedade";
-	}
+    @GetMapping("/propriedade/visualizar")
+    public String detailsPropriedade(@RequestParam(required = false) Long idPropriedade, Model model) {
+        Optional<Propriedade> propriedadeOptional = propriedadeRepo.findById(idPropriedade);
+        Propriedade propriedade = propriedadeOptional.orElse(null);
 
-	@GetMapping("/propriedade/visualizar")
-	public String detailsPropriedade(@RequestParam(required = false) Long idPropriedade, Model model) {
-		Optional<Propriedade> propriedadeOptional = propriedadeRepo.findById(idPropriedade);
-		Propriedade propriedade = propriedadeOptional.orElse(null);
+        model.addAttribute("propriedade", propriedade);
+        model.addAttribute("amostra", new Amostra());
+        return "visualizarPropriedade";
+    }
 
-		model.addAttribute("propriedade", propriedade);
-		model.addAttribute("amostra", new Amostra());
-		return "visualizarPropriedade";
-	}
+    @PostMapping("/amostras")
+    public String createAmostra(@RequestParam Long propriedadeId, @RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date data,
+                                @RequestParam Double quantidadeleite, @RequestParam Double quantidadeQueijo,
+                                @RequestParam String observacao) {
 
-	@PostMapping("/amostras")
-	public String createAmostra(@RequestParam Long propriedadeId, @RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date data,
-								@RequestParam Double quantidadeleite, @RequestParam Double quantidadeQueijo,
-								@RequestParam String observacao) {
+        Propriedade propriedade = propriedadeRepo.findById(propriedadeId)
+                .orElseThrow(() -> new IllegalArgumentException("Propriedade não encontrada"));
 
-		Propriedade propriedade = propriedadeRepo.findById(propriedadeId)
-				.orElseThrow(() -> new IllegalArgumentException("Propriedade não encontrada"));
+        Amostra amostra = new Amostra();
+        amostra.setData(data);
+        amostra.setQuantidadeleite(quantidadeleite);
+        amostra.setQuantidadeQueijo(quantidadeQueijo);
+        amostra.setObservacao(observacao);
+        amostra.setPropriedade(propriedade);
 
-		Amostra amostra = new Amostra();
-		amostra.setData(data);
-		amostra.setQuantidadeleite(quantidadeleite);
-		amostra.setQuantidadeQueijo(quantidadeQueijo);
-		amostra.setObservacao(observacao);
-		amostra.setPropriedade(propriedade);
+        amostraRepo.save(amostra);
 
-		amostraRepo.save(amostra);
+        return "redirect:/propriedade/visualizar?idPropriedade=" + propriedadeId;
+    }
 
-		return "redirect:/propriedade/visualizar?idPropriedade=" + propriedadeId;
-	}
-
-	@DeleteMapping("/amostra/delete/{id}")
-	@ResponseBody
-	public void deleteAmostra(@PathVariable("id") Long id) {
-		amostraRepo.deleteById(id); // Remove a amostra pelo ID fornecido
-	}
-
+    @DeleteMapping("/amostra/delete/{id}")
+    @ResponseBody
+    public void deleteAmostra(@PathVariable("id") Long id) {
+        amostraRepo.deleteById(id); // Remove a amostra pelo ID fornecido
+    }
 
 
+    @GetMapping("/propriedade/cadastrar")
+    public String createPropriedadeView(@RequestParam(required = false) Long idPropriedade,
+                                        Model model) {
 
-	
-	@GetMapping("/propriedade/cadastrar")
-	public String createPropriedadeView(@RequestParam(required = false) Long idPropriedade,
-									 Model model) {
-		
-		if(idPropriedade != null) {
-			 Optional<Propriedade> propriedade = propriedadeRepo.findById(idPropriedade);
-			
-			 model.addAttribute("propriedade", propriedade.get());
-		}
-		
-		
-		
-		List<Curso> cursos = cursoRepo.findAll();
-		List<Tecnologias> tecnologias = tecnologiaRepo.findAll();
-		List<Fornecedor> fornecedores = fornecedorRepo.findAll();
-		
-		model.addAttribute("cursos", cursos);
-		model.addAttribute("tecnologias", tecnologias);
-		model.addAttribute("fornecedores", fornecedores);
-		
-		return "propriedadeCadastrar";
-	}
-	
-	
-	@PostMapping("/propriedade")
-	public String createPropriedade(@RequestBody Propriedade propriedadeReq,
-									Model model) throws ParseException {
-		
-		for (Tecnologias tecnologia : propriedadeReq.getTecnologias()) {
+        if (idPropriedade != null) {
+            Optional<Propriedade> propriedade = propriedadeRepo.findById(idPropriedade);
+
+            model.addAttribute("propriedade", propriedade.get());
+        }
+
+
+        List<Curso> cursos = cursoRepo.findAll();
+        List<Tecnologias> tecnologias = tecnologiaRepo.findAll();
+        List<Fornecedor> fornecedores = fornecedorRepo.findAll();
+
+        model.addAttribute("cursos", cursos);
+        model.addAttribute("tecnologias", tecnologias);
+        model.addAttribute("fornecedores", fornecedores);
+
+        return "propriedadeCadastrar";
+    }
+
+
+    @PostMapping("/propriedade")
+    public String createPropriedade(@RequestBody Propriedade propriedadeReq,
+                                    Model model) throws ParseException {
+
+        for (Tecnologias tecnologia : propriedadeReq.getTecnologias()) {
             List<Tecnologias> tecnologiaExistente = tecnologiaRepo.findByNome(tecnologia.getNome());
             if (tecnologiaExistente.isEmpty()) {
-            	tecnologia.setId(null);
+                tecnologia.setId(null);
                 tecnologiaRepo.save(tecnologia);
                 tecnologia.setId(tecnologiaRepo.findFirstByOrderByIdDesc().getId());
             }
         }
-		
-		System.out.print(propriedadeReq);
-		
-		if(propriedadeReq.getIdPropriedade() != -1) {
-			propriedadeRepo.findById(propriedadeReq.getIdPropriedade())
-			.map(propriedade ->{
-				propriedade.setNomePropriedade(propriedadeReq.getNomePropriedade());
-                propriedade.setEmail(propriedadeReq.getEmail());
-                propriedade.setStatus(propriedadeReq.getStatus());
-                propriedade.setCPF(propriedadeReq.getCPF());
-                propriedade.setCNPJ(propriedadeReq.getCNPJ());
-                propriedade.setTelefone(propriedadeReq.getTelefone());
-                propriedade.setCelular(propriedadeReq.getCelular());
-                propriedade.setRua(propriedadeReq.getRua());
-                propriedade.setBairro(propriedadeReq.getBairro());
-                propriedade.setCidade(propriedadeReq.getCidade());
-                propriedade.setUF(propriedadeReq.getUF());
-                propriedade.setLatitude(propriedadeReq.getLatitude());
-                propriedade.setLongitude(propriedadeReq.getLongitude());
-                propriedade.setNomeProdutor(propriedadeReq.getNomeProdutor());
-                propriedade.setCursos(propriedadeReq.getCursos());
-                propriedade.setTecnologias(propriedadeReq.getTecnologias());
-                propriedade.setFornecedores(propriedadeReq.getFornecedores());
-				return propriedadeRepo.save(propriedade);
-			})
-			.orElseThrow(() -> new RuntimeException("Propriedade não encontrada com o ID: " + propriedadeReq.getIdPropriedade()));
-		}else {
-			propriedadeReq.setIdPropriedade(null);
-			propriedadeRepo.save(propriedadeReq);
-		}
-	
-		model.addAttribute("mensagem", "Propriedade salva com sucesso");
-		return "redirect:/contratos";
-	}
 
-	@PostMapping("/propriedade/delete/{id}")
-	public String createContrato(@PathVariable("id") Long idPropriedade,
-									Model model){
-		
-		propriedadeRepo.deleteById(idPropriedade);
-	
-		model.addAttribute("mensagem", "Propriedade deletada com sucesso");
-		return "redirect:/contratos";
-	}
+        System.out.print(propriedadeReq);
 
+        if (propriedadeReq.getIdPropriedade() != -1) {
+            propriedadeRepo.findById(propriedadeReq.getIdPropriedade())
+                    .map(propriedade -> {
+                        propriedade.setNomePropriedade(propriedadeReq.getNomePropriedade());
+                        propriedade.setEmail(propriedadeReq.getEmail());
+                        propriedade.setStatus(propriedadeReq.getStatus());
+                        propriedade.setCPF(propriedadeReq.getCPF());
+                        propriedade.setCNPJ(propriedadeReq.getCNPJ());
+                        propriedade.setTelefone(propriedadeReq.getTelefone());
+                        propriedade.setCelular(propriedadeReq.getCelular());
+                        propriedade.setRua(propriedadeReq.getRua());
+                        propriedade.setBairro(propriedadeReq.getBairro());
+                        propriedade.setCidade(propriedadeReq.getCidade());
+                        propriedade.setUF(propriedadeReq.getUF());
+                        propriedade.setLatitude(propriedadeReq.getLatitude());
+                        propriedade.setLongitude(propriedadeReq.getLongitude());
+                        propriedade.setNomeProdutor(propriedadeReq.getNomeProdutor());
+                        propriedade.setCursos(propriedadeReq.getCursos());
+                        propriedade.setTecnologias(propriedadeReq.getTecnologias());
+                        propriedade.setFornecedores(propriedadeReq.getFornecedores());
+                        return propriedadeRepo.save(propriedade);
+                    })
+                    .orElseThrow(() -> new RuntimeException("Propriedade não encontrada com o ID: " + propriedadeReq.getIdPropriedade()));
+        } else {
+            propriedadeReq.setIdPropriedade(null);
+            propriedadeRepo.save(propriedadeReq);
+        }
 
+        model.addAttribute("mensagem", "Propriedade salva com sucesso");
+        return "redirect:/contratos";
+    }
 
+    @PostMapping("/propriedade/delete/{id}")
+    public String createContrato(@PathVariable("id") Long idPropriedade,
+                                 Model model) {
 
+        propriedadeRepo.deleteById(idPropriedade);
+
+        model.addAttribute("mensagem", "Propriedade deletada com sucesso");
+        return "redirect:/contratos";
+    }
 
 
 }

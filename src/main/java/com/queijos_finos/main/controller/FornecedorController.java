@@ -29,7 +29,7 @@ public class FornecedorController {
     private FornecedorRepository fornecedorRepository;
 
     @GetMapping("/fornecedores")
-    public String showFornecedores(@RequestParam(name = "query", required = false) String query, Model model){
+    public String showFornecedores(@RequestParam(name = "query", required = false) String query, Model model) {
         List<Fornecedor> fornecedores;
         if (query != null && !query.isEmpty()) {
             fornecedores = fornecedorRepository.findByNomeContainingIgnoreCase(query);
@@ -47,11 +47,11 @@ public class FornecedorController {
                                    @RequestParam("nicho") String nicho,
                                    @RequestParam("email") String email,
                                    @RequestParam("qualidade") Double qualidade,
-                                   Model model) throws ParseException{
+                                   Model model) throws ParseException {
 
-        if(id != -1) {
+        if (id != -1) {
             fornecedorRepository.findById(id)
-                    .map(fornecedor ->{
+                    .map(fornecedor -> {
                         fornecedor.setNome(nome);
                         fornecedor.setNicho(nicho);
                         fornecedor.setEmail(email);
@@ -59,7 +59,7 @@ public class FornecedorController {
                         return fornecedorRepository.save(fornecedor);
                     })
                     .orElseThrow(() -> new RuntimeException("Fornecedor não encontrado com o ID: " + id));
-        }else {
+        } else {
             Fornecedor fornecedor = new Fornecedor();
             fornecedorRepository.save(fornecedor);
         }
@@ -70,7 +70,7 @@ public class FornecedorController {
 
     @PostMapping("/fornecedor/delete/{id}")
     public String deleteFornecedor(@PathVariable("id") Long id,
-                                 Model model) {
+                                   Model model) {
 
         fornecedorRepository.deleteById(id);
         return "redirect:/fornecedores";
@@ -79,9 +79,9 @@ public class FornecedorController {
 
     @GetMapping("/fornecedores/cadastrar")
     public String createFornecedorView(@RequestParam(required = false) Long idFornecedor,
-                                     Model model) {
+                                       Model model) {
 
-        if(idFornecedor != null) {
+        if (idFornecedor != null) {
             Optional<Fornecedor> fornecedor = fornecedorRepository.findById(idFornecedor);
             model.addAttribute("fornecedor", fornecedor.get());
         }

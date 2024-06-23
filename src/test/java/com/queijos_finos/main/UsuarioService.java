@@ -19,12 +19,12 @@ public class UsuarioService {
 
         if (id != -1) {
             return usuarioRepo.findById(id)
-                .map(usuarios -> {
-                    usuarios.setNome(nome);
-                    usuarios.setEmail(email);
-                    return usuarioRepo.save(usuarios);
-                })
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o ID: " + id));
+                    .map(usuarios -> {
+                        usuarios.setNome(nome);
+                        usuarios.setEmail(email);
+                        return usuarioRepo.save(usuarios);
+                    })
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o ID: " + id));
         } else {
             usuario.setNome(nome);
             usuario.setEmail(email);
@@ -32,7 +32,7 @@ public class UsuarioService {
             return usuarioRepo.save(usuario);
         }
     }
-    
+
     public Usuarios alterarSenhaUsuario(Long id, String novaSenha) {
         BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
         return usuarioRepo.findById(id)
