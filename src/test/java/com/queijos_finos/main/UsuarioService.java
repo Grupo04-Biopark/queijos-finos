@@ -13,7 +13,7 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepo;
 
-    public Usuarios cadastrarUsuarioHash(Long id, String nome, String email, String senha) {
+    public Usuarios cadastrarAlterarUsuarioHash(Long id, String nome, String email, String senha) {
         BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
         Usuarios usuario = new Usuarios();
 

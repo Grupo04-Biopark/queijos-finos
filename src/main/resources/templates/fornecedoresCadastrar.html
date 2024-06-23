@@ -335,12 +335,13 @@
                         </div>
                         <div class="mb-3">
                             <input th:value="${fornecedor != null}? ${{fornecedor.getQualidade()}} : ''"
-                                   name="qualidade" required type="text" style="border-color: #273C4E;"
+                                   name="qualidade" required type="number" style="border-color: #273C4E;"
                                    class="form-control rounded-pill shadow" placeholder="Qualidade">
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center">
-                            <button th:if="${fornecedor != null}"
+                            <button type="button"
+									th:if="${fornecedor != null}"
                                     th:onclick="'excluirPergunta(\'' + ${fornecedor.getId()} + '\');'"
                                     class="btn btn-danger rounded-pill fs-4 px-5 shadow "
                                     style="width: 200px; height: 55px">
@@ -385,13 +386,12 @@
             closeOnCancel: false
         }).then(function (result) {
             if (result.isConfirmed) {
-                // Se o usuário confirmou, execute a exclusão do contrato
                 $.ajax({
-                    url: '/contratos/delete/' + perguntaId,
+                    url: '/fornecedor/delete/' + perguntaId,
                     type: 'POST',
                     data: {_method: 'POST'},
                     success: function (response) {
-                        window.location.href = '/contratos';
+                        window.location.href = '/fornecedores';
                     },
                     error: function (xhr, status, error) {
                         Swal.fire({

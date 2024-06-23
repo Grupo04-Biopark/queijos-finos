@@ -6,6 +6,8 @@ import com.queijos_finos.main.model.Propriedade;
 import com.queijos_finos.main.model.Usuarios;
 import com.queijos_finos.main.repository.FornecedorRepository;
 
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -61,17 +63,22 @@ public class FornecedorController {
                     .orElseThrow(() -> new RuntimeException("Fornecedor não encontrado com o ID: " + id));
         } else {
             Fornecedor fornecedor = new Fornecedor();
+            fornecedor.setNome(nome);
+            fornecedor.setNicho(nicho);
+            fornecedor.setEmail(email);
+            fornecedor.setQualidade(qualidade);
             fornecedorRepository.save(fornecedor);
         }
 
         model.addAttribute("mensagem", "Fornecedor salvo com sucesso");
         return "redirect:/fornecedores";
     }
-
+    
+    @Transactional
     @PostMapping("/fornecedor/delete/{id}")
     public String deleteFornecedor(@PathVariable("id") Long id,
                                    Model model) {
-
+    	fornecedorRepository.deleteFornecedorPropriedadeRelacionamento(id);
         fornecedorRepository.deleteById(id);
         return "redirect:/fornecedores";
     }

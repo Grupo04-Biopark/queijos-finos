@@ -20,7 +20,7 @@ public class Curso {
     private String professor;
     private String duracao;
 
-    @ManyToMany(cascade = CascadeType.REMOVE, mappedBy = "cursos")
+    @ManyToMany(mappedBy = "cursos")
     private List<Propriedade> propriedades;
 
 

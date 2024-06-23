@@ -146,7 +146,7 @@ public class PropriedadeController {
         }
 
         model.addAttribute("mensagem", "Propriedade salva com sucesso");
-        return "redirect:/contratos";
+        return "redirect:/propriedade";
     }
 
     @PostMapping("/propriedade/delete/{id}")
@@ -156,7 +156,7 @@ public class PropriedadeController {
         propriedadeRepo.deleteById(idPropriedade);
 
         model.addAttribute("mensagem", "Propriedade deletada com sucesso");
-        return "redirect:/contratos";
+        return "redirect:/propriedade";
     }
 
 

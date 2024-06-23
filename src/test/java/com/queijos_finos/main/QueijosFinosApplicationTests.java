@@ -27,7 +27,7 @@ class QueijosFinosApplicationTests {
         BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
 
         //acao
-        Usuarios usuario = usuarioService.cadastrarUsuarioHash(id, nome, email, senha);
+        Usuarios usuario = usuarioService.cadastrarAlterarUsuarioHash(id, nome, email, senha);
 
         //validacao
         assertTrue(hashGenerator.matches(senha, usuario.getSenha()));
@@ -36,14 +36,14 @@ class QueijosFinosApplicationTests {
     @Test
     void alterarUsuarioComHash() {
         //cenario
-        long id = 202; // Make sure this user ID exists in the database
+        long id = 202;
         String nome = "Arthur";
         String email = "ritzelarthur@gmail.com";
         String senha = "";
         BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
 
         //acao
-        Usuarios usuario = usuarioService.cadastrarUsuarioHash(id, nome, email, senha);
+        Usuarios usuario = usuarioService.cadastrarAlterarUsuarioHash(id, nome, email, senha);
 
         //validacao
         assertEquals(email, usuario.getEmail());
@@ -52,12 +52,15 @@ class QueijosFinosApplicationTests {
     
     @Test
     void alterarSenhaUsuarioTest() {
+        //cenario
         long id = 202;
         String novaSenha = "admin";
         BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
 
+        //acao
         Usuarios usuario = usuarioService.alterarSenhaUsuario(id, novaSenha);
 
+        //validacao
         assertTrue(hashGenerator.matches(novaSenha, usuario.getSenha()));
     }
 }

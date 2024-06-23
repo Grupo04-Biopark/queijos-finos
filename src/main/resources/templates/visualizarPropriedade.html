@@ -340,9 +340,7 @@
                     <label for="selectYear">Selecione o ano:</label>
                     <select id="selectYear" onchange="filtrarPorAno(this.value)">
                     </select>
-                    <button class="btn btn-primary" style="margin-left: 10px; margin-bottom: 5px;"
-                            onclick="atualizarGrafico()"> Atualizar Grafico
-                    </button>
+                    
                 </div>
                 <div class="border border-black ms-5 me-5 p-2" id="chart"
                      style="border-radius: 10px; height: 250px; ">
@@ -359,7 +357,7 @@
                         <table class="table-stripe stripe h-100 w-100" id="myTable">
                             <thead>
                             <tr>
-                                <th scope="col">Amostra</th>
+                                <th scope="col">Observação</th>
                                 <th scope="col">Data</th>
                                 <th scope="col">Leite</th>
                                 <th scope="col">Queijo</th>
@@ -370,7 +368,7 @@
                             <tr class="border user-row" th:id="${amostra.getId()}"
                                 th:each="amostra, status : ${propriedade.getAmostras()}"
                                 th:short="${amostra.getData()}">
-                                <td th:text="'Amostra ' + ${status.index + 1}"></td>
+                                <td th:text="${amostra.getObservacao()}"></td>
                                 <td th:text="${#dates.format(amostra.getData(), 'dd/MM/yyyy')}"></td>
                                 <td th:text="${amostra.getQuantidadeleite()}"></td>
                                 <td th:text="${amostra.getQuantidadeQueijo()}"></td>
@@ -598,6 +596,7 @@
                         // Remover a linha da tabela DataTables
                         var dataTable = $('#myTable').DataTable();
                         dataTable.row('#' + id).remove().draw();
+						location.reload();
                     },
                     error: function (xhr, status, error) {
                         console.log("Erro ao deletar amostra")
@@ -771,11 +770,7 @@
                 }]);
             }
 
-            function atualizarGrafico() {
-                var selectAno = document.getElementById('selectYear');
-                var anoSelecionado = selectAno.value;
-                filtrarPorAno(anoSelecionado);
-            }
+            
 
             function atualizarSelectAnos() {
                 var selectAno = document.getElementById('selectYear');

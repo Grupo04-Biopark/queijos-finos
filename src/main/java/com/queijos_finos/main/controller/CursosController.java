@@ -2,6 +2,9 @@ package com.queijos_finos.main.controller;
 
 import com.queijos_finos.main.model.Curso;
 import com.queijos_finos.main.repository.CursosRepository;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -68,9 +71,11 @@ public class CursosController {
         model.addAttribute("mensagem", "Curso atualizado com sucesso");
         return "redirect:/cursos";
     }
-
+    
+    @Transactional
     @PostMapping("/delete/{id}")
     public String deleteCursos(@PathVariable Long id, Model model) {
+    	cursosRepository.deleteCursoPropriedadeRelacionamento(id);
         cursosRepository.deleteById(id);
         model.addAttribute("mensagem", "Curso excluído com sucesso");
         return "redirect:/cursos";

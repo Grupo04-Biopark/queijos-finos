@@ -624,14 +624,16 @@
 
 
                         <div class="d-flex justify-content-between align-items-center" style="padding-top: 20px">
-                            <button th:if="${propriedade != null}"
-                                    th:onclick="'excluirPergunta(\'' + ${propriedade.getIdPropriedade()} + '\');'"
+                            <button type="button"
+									th:if="${propriedade != null}"
+                                    th:onclick="'excluirPropriedade(\'' + ${propriedade.getIdPropriedade()} + '\');'"
                                     class="btn btn-danger rounded-pill fs-4 px-5 shadow "
                                     style="width: 200px; height: 55px">
                                 Excluir
                             </button>
 
-                            <button type="submit" th:text="${propriedade != null}? 'Atualizar' : 'Cadastrar'"
+                            <button type="button" th:text="${propriedade != null}? 'Atualizar' : 'Cadastrar'"
+									th:onclick="'cadastrarPropriedade();'"
                                     class="btn btn-success rounded-pill fs-4 px-5 shadow"
                                     style="width: 200px; height: 55px">Cadastrar
                             </button>
@@ -759,6 +761,11 @@
             lengthChange: false,
             info: false
         });
+		$('#fornecedorTable2').DataTable({
+		            paging: false,
+		            lengthChange: false,
+		            info: false
+		        });
         $('#tecnologiasTable').DataTable({
             paging: false,
             lengthChange: false,
@@ -1030,7 +1037,7 @@
                 tecnologias: allTecnologias
             }),
             success: function (response) {
-                window.location.href = '/contratos';
+                window.location.href = '/propriedade';
             },
             error: function (xhr, status, error) {
                 Swal.fire({
@@ -1057,7 +1064,6 @@
             closeOnCancel: false
         }).then(function (result) {
             if (result.isConfirmed) {
-                // Se o usuário confirmou, execute a exclusão do contrato
                 $.ajax({
                     url: '/propriedade/delete/' + propriedadeId,
                     type: 'POST',
