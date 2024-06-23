@@ -119,9 +119,9 @@ public class UsuarioController {
 
         if (hashGenerator.matches(senha, usu.getSenha())) {
             model.addAttribute("usu", usu);
-            long type1Count = propRepo.countBystatus(0);
+            long type1Count = propRepo.countBystatus(2);
             long type2Count = propRepo.countBystatus(1);
-            long type3Count = propRepo.countBystatus(2);
+            long type3Count = propRepo.countBystatus(0);
 
             model.addAttribute("type1Count", type1Count);
             model.addAttribute("type2Count", type2Count);
@@ -139,9 +139,9 @@ public class UsuarioController {
     public String paginaIncial(Model model) {
 
 
-        long type1Count = propRepo.countBystatus(0);
+        long type1Count = propRepo.countBystatus(2);
         long type2Count = propRepo.countBystatus(1);
-        long type3Count = propRepo.countBystatus(2);
+        long type3Count = propRepo.countBystatus(0);
 
         model.addAttribute("type1Count", type1Count);
         model.addAttribute("type2Count", type2Count);
