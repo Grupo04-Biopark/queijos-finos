@@ -42,4 +42,9 @@ public class UsuarioService {
                 })
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o ID: " + id));
     }
+
+    public Long deleteUsuario(long id) {
+        usuarioRepo.deleteById(id);
+        return id;
+    }
 }

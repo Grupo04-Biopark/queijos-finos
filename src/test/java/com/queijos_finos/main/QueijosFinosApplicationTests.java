@@ -1,12 +1,11 @@
 package com.queijos_finos.main;
 
-import static org.junit.Assert.assertNull;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.text.ParseException;
 import java.util.Date;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.queijos_finos.main.model.Contrato;
-import com.queijos_finos.main.model.Propriedade;
 import com.queijos_finos.main.model.Usuarios;
-import com.queijos_finos.main.UsuarioService;
 
 @SpringBootTest
 class QueijosFinosApplicationTests {
@@ -27,50 +24,62 @@ class QueijosFinosApplicationTests {
     @Autowired
     private ContratoService contratoService;
 
-    
-    void cadastrarUsuarioComHash() {
-        //cenario
+
+    @Test
+    public void deleteUsuario() {
+        // Scenario
+        long idUsuario = 130;
+
+        // Action
+        Long id = usuarioService.deleteUsuario(idUsuario);
+
+        // Validation
+        assertEquals(idUsuario, id);
+    }
+    @Test
+    public void cadastrarUsuarioComHash() {
+        // Scenario
         long id = -1;
-        String nome = "Arthur";
-        String email = "ritzelarthur@gmail.com";
+        String nome = "Arthuer2";
+        String email = "ritzeedlarthur@gmail.com";
         String senha = "admin";
         BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
 
-        //acao
+        // Action
         Usuarios usuario = usuarioService.cadastrarAlterarUsuarioHash(id, nome, email, senha);
 
-        //validacao
+        // Validation
         assertTrue(hashGenerator.matches(senha, usuario.getSenha()));
     }
 
-    
-    void alterarUsuarioComHash() {
-        //cenario
-        long id = 202;
+    @Test
+    public void alterarUsuarioComHash() {
+        // Scenario
+        long id = 135;
         String nome = "Arthur";
-        String email = "ritzelarthur@gmail.com";
+        String email = "ritzeewelarthur@gmail.com";
         String senha = "";
         BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
 
-        //acao
+        // Action
         Usuarios usuario = usuarioService.cadastrarAlterarUsuarioHash(id, nome, email, senha);
 
-        //validacao
+        // Validation
         assertEquals(email, usuario.getEmail());
         assertEquals(nome, usuario.getNome());
     }
-    
-    
-    void alterarSenhaUsuarioTest() {
-        //cenario
-        long id = 202;
+
+    @Test
+    public void alterarSenhaUsuarioTest() {
+        // Scenario
+        long id = 135;
         String novaSenha = "admin";
         BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
 
-        //acao
+        // Action
         Usuarios usuario = usuarioService.alterarSenhaUsuario(id, novaSenha);
 
-        //validacao
+        // Validation
         assertTrue(hashGenerator.matches(novaSenha, usuario.getSenha()));
     }
     
