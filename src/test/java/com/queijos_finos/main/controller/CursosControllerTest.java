@@ -37,7 +37,7 @@ class CursosControllerTest {
         curso.setNome("Curso Teste");
         curso.setProfessor("Professor Teste");
         curso.setConteudo("Conteúdo Teste");
-        curso.setDuracao("10 horas");
+        curso.setDuracao("10 meses");
 
         // Chamando o método cadastrarCurso do controller
         ResponseEntity<String> response = cursosController.cadastrarCurso(curso);
