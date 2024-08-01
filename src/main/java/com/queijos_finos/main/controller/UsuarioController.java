@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-
+import com.queijos_finos.main.model.Propriedade;
 import com.queijos_finos.main.model.Usuarios;
 import com.queijos_finos.main.repository.UsuarioRepository;
 
@@ -138,7 +138,9 @@ public class UsuarioController {
     @GetMapping("/paginaInicial")
     public String paginaIncial(Model model) {
 
-
+    	Pageable pageable = PageRequest.of(0, 5); // First page with 5 items
+    	List<Propriedade> top5Properties = propRepo.findTop5ByOrderByIdDesc(pageable).getContent();
+    	
         long type1Count = propRepo.countBystatus(2);
         long type2Count = propRepo.countBystatus(1);
         long type3Count = propRepo.countBystatus(0);
@@ -146,6 +148,7 @@ public class UsuarioController {
         model.addAttribute("type1Count", type1Count);
         model.addAttribute("type2Count", type2Count);
         model.addAttribute("type3Count", type3Count);
+        model.addAttribute("propriedades", top5Properties);
         return "paginaInicial";
 
     }

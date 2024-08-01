@@ -20,5 +20,8 @@ public interface PropriedadeRepository extends JpaRepository<Propriedade, Long> 
 
     @Query("SELECT p FROM Propriedade p WHERE p.id NOT IN (SELECT DISTINCT c.propriedade.id FROM Contrato c)")
     List<Propriedade> findWithoutContrato();
+    
+    @Query("SELECT p FROM Propriedade p ORDER BY p.id DESC")
+    Page<Propriedade> findTop5ByOrderByIdDesc(Pageable pageable);
 
 }
