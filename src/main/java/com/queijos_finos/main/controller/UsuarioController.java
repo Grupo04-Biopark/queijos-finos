@@ -1,7 +1,11 @@
 package com.queijos_finos.main.controller;
 
 import com.queijos_finos.main.repository.PropriedadeRepository;
+import com.queijos_finos.main.repository.TecnologiaRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,12 +14,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.queijos_finos.main.dto.TecnologiaCountProp;
 import com.queijos_finos.main.model.Propriedade;
 import com.queijos_finos.main.model.Usuarios;
 import com.queijos_finos.main.repository.UsuarioRepository;
 
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Query;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class UsuarioController {
@@ -24,6 +33,8 @@ public class UsuarioController {
     private UsuarioRepository usuarioRepo;
     @Autowired
     private PropriedadeRepository propRepo;
+    @Autowired
+    private TecnologiaRepository tecnologiaRepository;
 
 
     @GetMapping("/usuarios")
@@ -122,10 +133,19 @@ public class UsuarioController {
             long type1Count = propRepo.countBystatus(2);
             long type2Count = propRepo.countBystatus(1);
             long type3Count = propRepo.countBystatus(0);
-
+            Pageable pageable = PageRequest.of(0, 5); // First page with 5 items
+        	List<Propriedade> top5Properties = propRepo.findTop5ByOrderByIdDesc(pageable).getContent();
+        	
+        	Page<Object[]> results = tecnologiaRepository.countTecnologiaPropriedadesNative(pageable);
+            List<TecnologiaCountProp> tecnologiaCountProps = results.stream()
+                .map(obj -> new TecnologiaCountProp((String) obj[0], ((Number) obj[1]).longValue()))
+                .collect(Collectors.toList());
+                
             model.addAttribute("type1Count", type1Count);
             model.addAttribute("type2Count", type2Count);
             model.addAttribute("type3Count", type3Count);
+            model.addAttribute("propriedades", top5Properties);
+            model.addAttribute("topTec", tecnologiaCountProps);
             System.out.println(usu.getNome());
             return "paginaInicial";
         } else {
@@ -141,6 +161,12 @@ public class UsuarioController {
     	Pageable pageable = PageRequest.of(0, 5); // First page with 5 items
     	List<Propriedade> top5Properties = propRepo.findTop5ByOrderByIdDesc(pageable).getContent();
     	
+    	Page<Object[]> results = tecnologiaRepository.countTecnologiaPropriedadesNative(pageable);
+        List<TecnologiaCountProp> tecnologiaCountProps = results.stream()
+            .map(obj -> new TecnologiaCountProp((String) obj[0], ((Number) obj[1]).longValue()))
+            .collect(Collectors.toList());
+        
+    	
         long type1Count = propRepo.countBystatus(2);
         long type2Count = propRepo.countBystatus(1);
         long type3Count = propRepo.countBystatus(0);
@@ -149,6 +175,7 @@ public class UsuarioController {
         model.addAttribute("type2Count", type2Count);
         model.addAttribute("type3Count", type3Count);
         model.addAttribute("propriedades", top5Properties);
+        model.addAttribute("topTec", tecnologiaCountProps);
         return "paginaInicial";
 
     }
